@@ -1,5 +1,5 @@
 {
-  "name": "my-project",
+  "name": "web-conveyancing",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,19 +8,71 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "description": "Conveyancing Platform - Streamlining Property Transaction Management. A specialized service that simplifies and accelerates the legal and administrative processes involved in buying and selling properties. From offer acceptance through completion, we handle complex coordination with lenders, lawyers, and brokers to ensure seamless, efficient property transactions.",
+  "keywords": [
+    "conveyancing",
+    "property-transaction",
+    "real-estate",
+    "property-management",
+    "legal-services",
+    "chain-management",
+    "sales-progression",
+    "transaction-coordination"
+  ],
+  "author": {
+    "name": "Rahul Sharma",
+    "email": "contact@conveyancing.com",
+    "url": "https://github.com/rahulshrmaz"
+  },
+  "social": {
+    "github": "https://github.com/rahulshrmaz",
+    "linkedin": "https://linkedin.com/in/rahulshrmaz",
+    "twitter": "https://twitter.com/rahulshrmaz",
+    "facebook": "https://facebook.com/rahulshrmaz",
+    "instagram": "https://instagram.com/rahulshrmaz",
+    "pinterest": "https://pinterest.com/rahulshrmaz"
+  },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.4.0",
+    "@mui/icons-material": "^9.1.1",
+    "@mui/lab": "^9.0.0-beta.5",
+    "@mui/material": "^9.1.1",
+    "@mui/material-nextjs": "^9.1.1",
+    "@mui/system": "^9.1.1",
+    "@mui/x-data-grid": "^9.5.0",
+    "@mui/x-date-pickers": "^9.5.0",
+    "@reduxjs/toolkit": "^2.12.0",
+    "@studio-freight/lenis": "^1.0.42",
+    "axios": "^1.18.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.40.0",
+    "gsap": "^3.15.0",
+    "lucide-react": "^1.18.0",
     "next": "16.2.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-countup": "^6.5.3",
+    "react-dom": "19.2.4",
+    "react-dropzone": "^15.0.0",
+    "react-hook-form": "^7.79.0",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.6.0",
+    "react-intersection-observer": "^10.0.3",
+    "react-redux": "^9.3.0",
+    "react-spring": "^10.0.4",
+    "recharts": "^3.8.1",
+    "redux": "^5.0.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }
