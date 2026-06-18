@@ -46,11 +46,8 @@ export default function NavbarPremium() {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const ctaButtonRef = useRef<HTMLButtonElement | null>(null);
   const appBarRef = useRef<HTMLElement | null>(null);
-  const glowRef = useRef<HTMLDivElement | null>(null);
-  const drawerContentRef = useRef<HTMLDivElement | null>(null);
   const hasAnimated = useRef(false);
 
-  // ═══════════ SCROLL HANDLER ═══════════
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -66,321 +63,135 @@ export default function NavbarPremium() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ═══════════ SCROLL NAVBAR SHADOW ═══════════
-  useEffect(() => {
-    if (appBarRef.current) {
-      gsap.to(appBarRef.current, {
-        duration: 0.5,
-        boxShadow: scrolled
-          ? "0 8px 48px rgba(10, 21, 53, 0.12), 0 2px 12px rgba(200, 169, 81, 0.08)"
-          : "none",
-        ease: "power2.out",
-      });
-    }
-  }, [scrolled]);
-
-  // ═══════════ INITIAL ENTRANCE ANIMATIONS ═══════════
   useEffect(() => {
     if (hasAnimated.current) return;
     hasAnimated.current = true;
 
     const ctx = gsap.context(() => {
-      const masterTL = gsap.timeline({
-        defaults: { ease: "power4.out" },
-      });
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      // 1) Navbar slides down
-      masterTL.fromTo(
+      tl.fromTo(
         appBarRef.current,
-        { y: -120, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1 }
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1 }
       );
 
-      // 2) Logo 3D flip entrance with bounce
-      masterTL.fromTo(
+      tl.fromTo(
         logoRef.current,
-        {
-          opacity: 0,
-          scale: 0.3,
-          rotateY: -180,
-          x: -50,
-        },
+        { opacity: 0, scale: 0.3, rotateY: -180 },
         {
           opacity: 1,
           scale: 1,
           rotateY: 0,
-          x: 0,
           duration: 1.2,
           ease: "back.out(1.7)",
-        },
-        "-=0.7"
-      );
-
-      // 3) Logo glow fade in
-      if (glowRef.current) {
-        masterTL.fromTo(
-          glowRef.current,
-          { opacity: 0, scale: 0.5 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 1,
-            ease: "power2.out",
-          },
-          "-=0.6"
-        );
-      }
-
-      // 4) Nav links wave from center
-      const validNavLinks = navLinksRef.current.filter(
-        (link): link is HTMLDivElement => link !== null
-      );
-      masterTL.fromTo(
-        validNavLinks,
-        { opacity: 0, y: -35, scale: 0.85, rotateX: -15 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          duration: 0.7,
-          stagger: {
-            each: 0.06,
-            from: "center",
-            ease: "power2.out",
-          },
-          ease: "back.out(1.4)",
         },
         "-=0.6"
       );
 
-      // 5) CTA button slides in
-      masterTL.fromTo(
-        ctaButtonRef.current,
-        { opacity: 0, x: 60, scale: 0.8 },
+      const validLinks = navLinksRef.current.filter(Boolean);
+      tl.fromTo(
+        validLinks,
+        { opacity: 0, y: -30, scale: 0.85 },
         {
           opacity: 1,
-          x: 0,
+          y: 0,
           scale: 1,
-          duration: 0.9,
-          ease: "back.out(1.5)",
+          duration: 0.6,
+          stagger: { each: 0.06, from: "center" },
+          ease: "back.out(1.4)",
         },
-        "-=0.4"
+        "-=0.5"
       );
 
-      // 6) Continuous logo glow pulse (infinite)
-      if (glowRef.current) {
-        gsap.to(glowRef.current, {
-          opacity: 0.3,
-          scale: 1.3,
-          duration: 2.5,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          delay: 1.5,
-        });
-      }
+      tl.fromTo(
+        ctaButtonRef.current,
+        { opacity: 0, x: 50, scale: 0.8 },
+        { opacity: 1, x: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" },
+        "-=0.3"
+      );
     }, appBarRef);
 
     return () => ctx.revert();
   }, []);
 
-  // ═══════════ NAV LINK HOVER ANIMATIONS ═══════════
   useEffect(() => {
     const navItems = document.querySelectorAll("[data-nav-link]");
+    const handlers: { el: Element; enter: () => void; leave: () => void }[] =
+      [];
 
-    const enterHandlers: (() => void)[] = [];
-    const leaveHandlers: (() => void)[] = [];
-
-    navItems.forEach((item, i) => {
+    navItems.forEach((item) => {
       const underline = item.querySelector("[data-underline]");
-      const dot = item.querySelector("[data-dot]");
       const text = item.querySelector("p");
 
-      const enterHandler = () => {
+      const enter = () => {
         gsap.to(underline, {
-          duration: 0.4,
           scaleX: 1,
           opacity: 1,
+          duration: 0.35,
           ease: "power3.out",
-          overwrite: "auto",
         });
-        gsap.to(text, {
-          duration: 0.25,
-          color: "#0a1535",
-          y: -2,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-        if (dot) {
-          gsap.to(dot, {
-            duration: 0.35,
-            scale: 1,
-            opacity: 1,
-            ease: "back.out(2.5)",
-            overwrite: "auto",
-          });
-        }
+        gsap.to(text, { color: "#0a1535", y: -1, duration: 0.25 });
         gsap.to(item, {
-          duration: 0.3,
-          background: "rgba(255, 255, 255, 0.9)",
-          boxShadow: "0 4px 16px rgba(10, 21, 53, 0.06)",
-          ease: "power2.out",
-          overwrite: "auto",
+          background: "rgba(255,255,255,0.9)",
+          duration: 0.25,
         });
       };
-
-      const leaveHandler = () => {
-        const isActive = item.getAttribute("data-active") === "true";
+      const leave = () => {
+        const active = item.getAttribute("data-active") === "true";
         gsap.to(underline, {
+          scaleX: active ? 1 : 0,
+          opacity: active ? 1 : 0,
           duration: 0.3,
-          scaleX: isActive ? 1 : 0,
-          opacity: isActive ? 1 : 0,
-          ease: "power2.inOut",
-          overwrite: "auto",
         });
         gsap.to(text, {
-          duration: 0.25,
-          color: isActive ? "#0a1535" : "#5a6478",
+          color: active ? "#0a1535" : "#5a6478",
           y: 0,
-          ease: "power2.out",
-          overwrite: "auto",
+          duration: 0.25,
         });
-        if (dot) {
-          gsap.to(dot, {
-            duration: 0.2,
-            scale: isActive ? 1 : 0,
-            opacity: isActive ? 1 : 0,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        }
         gsap.to(item, {
-          duration: 0.3,
-          background: isActive ? "rgba(255, 255, 255, 0.9)" : "transparent",
-          boxShadow: isActive
-            ? "0 2px 12px rgba(10, 21, 53, 0.06)"
-            : "none",
-          ease: "power2.out",
-          overwrite: "auto",
+          background: active ? "rgba(255,255,255,0.95)" : "transparent",
+          duration: 0.25,
         });
       };
 
-      enterHandlers.push(enterHandler);
-      leaveHandlers.push(leaveHandler);
-
-      item.addEventListener("mouseenter", enterHandler);
-      item.addEventListener("mouseleave", leaveHandler);
+      item.addEventListener("mouseenter", enter);
+      item.addEventListener("mouseleave", leave);
+      handlers.push({ el: item, enter, leave });
     });
 
-    return () => {
-      navItems.forEach((item, i) => {
-        item.removeEventListener("mouseenter", enterHandlers[i]);
-        item.removeEventListener("mouseleave", leaveHandlers[i]);
+    return () =>
+      handlers.forEach(({ el, enter, leave }) => {
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
       });
-    };
   }, [isMobile, pathname]);
 
-  // ═══════════ CTA BUTTON HOVER ═══════════
   useEffect(() => {
     const btn = ctaButtonRef.current;
     if (!btn) return;
-
-    const handleEnter = () => {
+    const enter = () =>
       gsap.to(btn, {
-        duration: 0.4,
-        scale: 1.06,
-        y: -3,
-        boxShadow:
-          "0 20px 50px rgba(10, 21, 53, 0.35), 0 0 25px rgba(200, 169, 81, 0.15)",
-        ease: "power2.out",
+        scale: 1.05,
+        y: -2,
+        boxShadow: "0 12px 35px rgba(10,21,53,0.25)",
+        duration: 0.3,
       });
-      const arrow = btn.querySelector(".btn-arrow");
-      if (arrow) {
-        gsap.to(arrow, {
-          x: 5,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    const handleLeave = () => {
+    const leave = () =>
       gsap.to(btn, {
-        duration: 0.35,
         scale: 1,
         y: 0,
-        boxShadow: "0 4px 20px rgba(10, 21, 53, 0.15)",
-        ease: "power2.out",
+        boxShadow: "0 4px 20px rgba(10,21,53,0.12)",
+        duration: 0.3,
       });
-      const arrow = btn.querySelector(".btn-arrow");
-      if (arrow) {
-        gsap.to(arrow, {
-          x: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    btn.addEventListener("mouseenter", handleEnter);
-    btn.addEventListener("mouseleave", handleLeave);
-
+    btn.addEventListener("mouseenter", enter);
+    btn.addEventListener("mouseleave", leave);
     return () => {
-      btn.removeEventListener("mouseenter", handleEnter);
-      btn.removeEventListener("mouseleave", handleLeave);
+      btn.removeEventListener("mouseenter", enter);
+      btn.removeEventListener("mouseleave", leave);
     };
   }, [isMobile]);
 
-  // ═══════════ LOGO HOVER ═══════════
-  useEffect(() => {
-    const logo = logoRef.current;
-    if (!logo) return;
-
-    const handleEnter = () => {
-      gsap.to(logo, {
-        duration: 0.5,
-        scale: 1.08,
-        y: -3,
-        ease: "back.out(1.5)",
-      });
-      if (glowRef.current) {
-        gsap.to(glowRef.current, {
-          duration: 0.4,
-          opacity: 0.8,
-          scale: 1.4,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    const handleLeave = () => {
-      gsap.to(logo, {
-        duration: 0.4,
-        scale: 1,
-        y: 0,
-        ease: "power2.out",
-      });
-      if (glowRef.current) {
-        gsap.to(glowRef.current, {
-          duration: 0.4,
-          opacity: 0.6,
-          scale: 1,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    logo.addEventListener("mouseenter", handleEnter);
-    logo.addEventListener("mouseleave", handleLeave);
-
-    return () => {
-      logo.removeEventListener("mouseenter", handleEnter);
-      logo.removeEventListener("mouseleave", handleLeave);
-    };
-  }, []);
-
-  // ═══════════ MOBILE DRAWER TOGGLE ═══════════
   const handleDrawerToggle = useCallback(() => {
     if (!mobileOpen) {
       setMobileOpen(true);
@@ -389,47 +200,16 @@ export default function NavbarPremium() {
           const items = document.querySelectorAll(".mobile-drawer-item");
           gsap.fromTo(
             items,
-            { opacity: 0, x: 80, scale: 0.9 },
+            { opacity: 0, x: 60 },
             {
               opacity: 1,
               x: 0,
-              scale: 1,
-              duration: 0.55,
+              duration: 0.5,
+              stagger: 0.05,
               ease: "power3.out",
-              stagger: 0.055,
             }
           );
-
-          const mobileBtn = document.querySelector(".mobile-cta-section");
-          if (mobileBtn) {
-            gsap.fromTo(
-              mobileBtn,
-              { opacity: 0, y: 40 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.7,
-                ease: "back.out(1.3)",
-                delay: 0.45,
-              }
-            );
-          }
-
-          const mobileLogo = document.querySelector(".mobile-drawer-logo");
-          if (mobileLogo) {
-            gsap.fromTo(
-              mobileLogo,
-              { opacity: 0, scale: 0.5, rotateY: -90 },
-              {
-                opacity: 1,
-                scale: 1,
-                rotateY: 0,
-                duration: 0.8,
-                ease: "back.out(1.7)",
-              }
-            );
-          }
-        }, 120);
+        }, 100);
       });
     } else {
       setMobileOpen(false);
@@ -438,26 +218,23 @@ export default function NavbarPremium() {
 
   return (
     <>
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ═══════════ APPBAR ═══════════ */}
-      {/* ═══════════════════════════════════════════════════════════ */}
       <AppBar
         ref={appBarRef}
         position="fixed"
         elevation={0}
         sx={{
           background: scrolled
-            ? "rgba(255, 255, 255, 0.88)"
-            : "rgba(255, 255, 255, 1)",
-          backdropFilter: scrolled ? "blur(28px) saturate(200%)" : "none",
-          WebkitBackdropFilter: scrolled
-            ? "blur(28px) saturate(200%)"
-            : "none",
+            ? "rgba(255,255,255,0.55)"
+            : "rgba(255,255,255,0.65)",
+          backdropFilter: "blur(24px) saturate(180%)",
+          WebkitBackdropFilter: "blur(24px) saturate(180%)",
           borderBottom: scrolled
-            ? "1px solid rgba(10, 21, 53, 0.05)"
-            : "1px solid rgba(10, 21, 53, 0.03)",
-          transition:
-            "background 0.5s ease, border-bottom 0.5s ease, backdrop-filter 0.5s ease",
+            ? "1px solid rgba(10,21,53,0.08)"
+            : "1px solid rgba(10,21,53,0.04)",
+          boxShadow: scrolled
+            ? "0 4px 30px rgba(10,21,53,0.08), 0 1px 8px rgba(200,169,81,0.04)"
+            : "0 1px 12px rgba(10,21,53,0.03)",
+          transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
           zIndex: 1300,
         }}
       >
@@ -467,121 +244,83 @@ export default function NavbarPremium() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              py: { xs: 1, md: 1.2, lg: 1.5 },
+              py: { xs: 0.3, md: 0.4, lg: 0.5 },
               minHeight: {
-                xs: "78px",
-                sm: "85px",
-                md: "105px",
-                lg: "115px",
+                xs: "64px",
+                sm: "68px",
+                md: "72px",
+                lg: "76px",
               },
               gap: 2,
             }}
             disableGutters
           >
-            {/* ═══════════════════════════════════════ */}
-            {/* ═══════════ LOGO ═══════════ */}
-            {/* ═══════════════════════════════════════ */}
+            {/* ══════ LOGO - BIGGER ══════ */}
             <Link href="/" style={{ textDecoration: "none" }}>
               <Box
                 ref={logoRef}
                 sx={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   cursor: "pointer",
+                  perspective: "1000px",
                   position: "relative",
-                  perspective: "800px",
                   height: {
-                    xs: "62px",
-                    sm: "75px",
-                    md: "90px",
-                    lg: "100px",
-                    xl: "110px",
+                    xs: "100px",
+                    sm: "120px",
+                    md: "150px",
+                    lg: "170px",
+                    xl: "185px",
                   },
-                  minWidth: {
-                    xs: "62px",
-                    sm: "75px",
-                    md: "90px",
-                    lg: "100px",
-                    xl: "110px",
+                  width: {
+                    xs: "100px",
+                    sm: "120px",
+                    md: "150px",
+                    lg: "170px",
+                    xl: "185px",
                   },
+                  transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+                  "&:hover": {
+                    transform: "scale(1.06) translateY(-2px)",
+                  },
+                  flexShrink: 0,
                 }}
               >
-                {/* Glow behind logo */}
-                <Box
-                  ref={glowRef}
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "140%",
-                    height: "140%",
-                    background:
-                      "radial-gradient(circle, rgba(200, 169, 81, 0.18) 0%, rgba(200, 169, 81, 0.06) 40%, transparent 70%)",
-                    borderRadius: "50%",
-                    pointerEvents: "none",
-                    opacity: 0.6,
-                    filter: "blur(4px)",
-                  }}
-                />
-
-                {/* Outer ring */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "115%",
-                    height: "115%",
-                    borderRadius: "50%",
-                    border: "1.5px solid rgba(200, 169, 81, 0.1)",
-                    pointerEvents: "none",
-                    opacity: scrolled ? 0 : 0.6,
-                    transition: "opacity 0.5s ease",
-                  }}
-                />
-
                 <Image
                   src="/logo.png"
                   alt="Premium Consulting Logo"
-                  width={300}
-                  height={300}
+                  width={185}
+                  height={185}
                   priority
                   quality={100}
-                  sizes="(max-width: 600px) 62px, (max-width: 900px) 75px, (max-width: 1200px) 90px, 110px"
+                  sizes="(max-width: 640px) 100px, (max-width: 900px) 120px, (max-width: 1200px) 150px, (max-width: 1536px) 170px, 185px"
                   style={{
-                    width: "auto",
-                    height: "100%",
                     objectFit: "contain",
-                    filter:
-                      "drop-shadow(0 4px 12px rgba(10, 21, 53, 0.1)) drop-shadow(0 1px 3px rgba(200, 169, 81, 0.08))",
-                    position: "relative",
-                    zIndex: 1,
+                    width: "100%",
+                    height: "100%",
+                    filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.05))",
                   }}
                 />
               </Box>
             </Link>
 
-            {/* ═══════════════════════════════════════ */}
-            {/* ═══════════ DESKTOP NAVIGATION ═══════════ */}
-            {/* ═══════════════════════════════════════ */}
+            {/* ══════ DESKTOP NAV ══════ */}
             {!isMobile && (
               <Stack
                 direction="row"
-                spacing={0.25}
+                spacing={0.3}
                 sx={{
                   position: "absolute",
                   left: "50%",
                   transform: "translateX(-50%)",
-                  background: scrolled
-                    ? "rgba(245, 247, 251, 0.7)"
-                    : "rgba(245, 247, 251, 0.5)",
-                  borderRadius: "18px",
-                  padding: "7px 12px",
-                  border: "1px solid rgba(10, 21, 53, 0.04)",
-                  backdropFilter: "blur(12px)",
-                  transition: "background 0.4s ease",
+                  background: "rgba(255,255,255,0.45)",
+                  borderRadius: "16px",
+                  padding: "5px 10px",
+                  border: "1px solid rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(16px)",
+                  boxShadow: "0 2px 12px rgba(10,21,53,0.04)",
+                  transition: "all 0.4s ease",
                 }}
               >
                 {navLinks.map((link, index) => {
@@ -600,18 +339,17 @@ export default function NavbarPremium() {
                         data-active={isActive}
                         sx={{
                           position: "relative",
-                          px: { md: 1.5, lg: 2, xl: 2.2 },
-                          py: 1.1,
+                          px: { md: 1.4, lg: 1.8, xl: 2.2 },
+                          py: 0.8,
                           cursor: "pointer",
-                          borderRadius: "12px",
+                          borderRadius: "11px",
                           background: isActive
-                            ? "rgba(255, 255, 255, 0.95)"
+                            ? "rgba(255,255,255,0.85)"
                             : "transparent",
                           boxShadow: isActive
-                            ? "0 3px 14px rgba(10, 21, 53, 0.07), 0 1px 4px rgba(200, 169, 81, 0.05)"
+                            ? "0 2px 10px rgba(10,21,53,0.06)"
                             : "none",
-                          transition:
-                            "background 0.3s ease, box-shadow 0.3s ease",
+                          transition: "all 0.3s ease",
                         }}
                       >
                         <Typography
@@ -619,48 +357,27 @@ export default function NavbarPremium() {
                           sx={{
                             fontSize: {
                               md: "0.82rem",
-                              lg: "0.88rem",
+                              lg: "0.87rem",
                               xl: "0.92rem",
                             },
                             fontWeight: isActive ? 700 : 500,
                             color: isActive ? "#0a1535" : "#5a6478",
                             fontFamily: "'Inter', sans-serif",
-                            letterSpacing: "0.015em",
+                            letterSpacing: "0.01em",
                             whiteSpace: "nowrap",
-                            transition: "color 0.3s ease",
                             userSelect: "none",
                           }}
                         >
                           {link.name}
                         </Typography>
 
-                        {/* Active dot */}
-                        <Box
-                          data-dot
-                          sx={{
-                            position: "absolute",
-                            top: "5px",
-                            right: "7px",
-                            width: "6px",
-                            height: "6px",
-                            borderRadius: "50%",
-                            background:
-                              "linear-gradient(135deg, #c8a951, #e0c76a)",
-                            boxShadow: "0 0 10px rgba(200, 169, 81, 0.5)",
-                            transform: isActive ? "scale(1)" : "scale(0)",
-                            opacity: isActive ? 1 : 0,
-                            transition: "all 0.3s ease",
-                          }}
-                        />
-
-                        {/* Underline */}
                         <Box
                           data-underline
                           sx={{
                             position: "absolute",
-                            bottom: "5px",
-                            left: "18%",
-                            right: "18%",
+                            bottom: "3px",
+                            left: "20%",
+                            right: "20%",
                             height: "2.5px",
                             background:
                               "linear-gradient(90deg, #c8a951, #d4b365, #c8a951)",
@@ -668,9 +385,9 @@ export default function NavbarPremium() {
                             transformOrigin: "center",
                             transform: isActive ? "scaleX(1)" : "scaleX(0)",
                             opacity: isActive ? 1 : 0,
-                            boxShadow: "0 2px 12px rgba(200, 169, 81, 0.35)",
+                            boxShadow: "0 1px 8px rgba(200,169,81,0.3)",
                             transition:
-                              "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                              "all 0.4s cubic-bezier(0.34,1.56,0.64,1)",
                           }}
                         />
                       </Box>
@@ -680,57 +397,42 @@ export default function NavbarPremium() {
               </Stack>
             )}
 
-            {/* ═══════════════════════════════════════ */}
-            {/* ═══════════ CTA / HAMBURGER ═══════════ */}
-            {/* ═══════════════════════════════════════ */}
+            {/* ══════ CTA / HAMBURGER ══════ */}
             {!isMobile ? (
               <Button
                 ref={ctaButtonRef}
                 variant="contained"
-                endIcon={
-                  <Box
-                    className="btn-arrow"
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <HiArrowRight size={18} />
-                  </Box>
-                }
+                endIcon={<HiArrowRight size={17} />}
                 sx={{
                   background:
-                    "linear-gradient(135deg, #0a1535 0%, #1a2a5e 100%)",
-                  color: "#ffffff",
-                  borderRadius: "14px",
-                  px: { md: 3, lg: 3.5, xl: 4 },
-                  py: { md: 1.3, lg: 1.5 },
-                  fontSize: { md: "0.85rem", lg: "0.9rem" },
+                    "linear-gradient(135deg, #0a1535 0%, #162550 50%, #1a2a5e 100%)",
+                  color: "#fff",
+                  borderRadius: "13px",
+                  px: { md: 2.8, lg: 3.2, xl: 3.8 },
+                  py: { md: 1, lg: 1.2 },
+                  fontSize: { md: "0.84rem", lg: "0.89rem" },
                   fontWeight: 600,
                   textTransform: "none",
-                  boxShadow: "0 4px 20px rgba(10, 21, 53, 0.15)",
-                  position: "relative",
-                  overflow: "hidden",
+                  boxShadow: "0 4px 20px rgba(10,21,53,0.12)",
                   fontFamily: "'Inter', sans-serif",
                   letterSpacing: "0.02em",
-                  border: "1px solid rgba(200, 169, 81, 0.15)",
+                  border: "1px solid rgba(200,169,81,0.12)",
                   flexShrink: 0,
-                  "&::before": {
+                  position: "relative",
+                  overflow: "hidden",
+                  "&::after": {
                     content: '""',
                     position: "absolute",
-                    top: 0,
-                    left: "-100%",
-                    width: "100%",
-                    height: "100%",
+                    inset: 0,
                     background:
-                      "linear-gradient(90deg, transparent, rgba(200, 169, 81, 0.2), transparent)",
-                    transition: "left 0.7s ease",
+                      "linear-gradient(135deg, transparent 40%, rgba(200,169,81,0.08) 100%)",
+                    pointerEvents: "none",
                   },
                   "&:hover": {
                     background:
-                      "linear-gradient(135deg, #0d1b45 0%, #1e3270 100%)",
-                    "&::before": {
-                      left: "100%",
-                    },
+                      "linear-gradient(135deg, #0d1b45 0%, #1a2f65 50%, #1e3270 100%)",
                   },
-                  transition: "all 0.4s ease",
+                  transition: "all 0.3s ease",
                 }}
               >
                 Book Consultation
@@ -740,46 +442,40 @@ export default function NavbarPremium() {
                 onClick={handleDrawerToggle}
                 sx={{
                   color: "#0a1535",
-                  width: 52,
-                  height: 52,
-                  borderRadius: "14px",
-                  background: "rgba(10, 21, 53, 0.04)",
-                  border: "1px solid rgba(10, 21, 53, 0.06)",
+                  width: 44,
+                  height: 44,
+                  borderRadius: "12px",
+                  background: "rgba(255,255,255,0.5)",
+                  border: "1px solid rgba(10,21,53,0.06)",
+                  backdropFilter: "blur(8px)",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    background: "rgba(10, 21, 53, 0.08)",
+                    background: "rgba(255,255,255,0.7)",
                     transform: "scale(1.05)",
-                  },
-                  "&:active": {
-                    transform: "scale(0.95)",
                   },
                 }}
               >
-                <FaBars size={24} />
+                <FaBars size={20} />
               </IconButton>
             )}
           </Toolbar>
         </Container>
 
-        {/* Bottom gold accent line on scroll */}
         <Box
           sx={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            height: "2px",
-            background: scrolled
-              ? "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.25) 15%, rgba(200, 169, 81, 0.5) 50%, rgba(200, 169, 81, 0.25) 85%, transparent 100%)"
-              : "transparent",
-            transition: "background 0.6s ease",
+            height: scrolled ? "2px" : "0px",
+            background:
+              "linear-gradient(90deg, transparent 5%, rgba(200,169,81,0.15) 25%, rgba(200,169,81,0.4) 50%, rgba(200,169,81,0.15) 75%, transparent 95%)",
+            transition: "height 0.5s ease",
           }}
         />
       </AppBar>
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ═══════════ MOBILE DRAWER ═══════════ */}
-      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* ══════ MOBILE DRAWER ══════ */}
       <Drawer
         anchor="right"
         open={mobileOpen}
@@ -787,66 +483,55 @@ export default function NavbarPremium() {
         sx={{
           zIndex: 1400,
           "& .MuiBackdrop-root": {
-            background: "rgba(10, 21, 53, 0.35)",
-            backdropFilter: "blur(10px)",
+            background: "rgba(10,21,53,0.25)",
+            backdropFilter: "blur(8px)",
           },
           "& .MuiDrawer-paper": {
-            width: "90%",
-            maxWidth: "400px",
-            background: "linear-gradient(180deg, #ffffff 0%, #f7f8fc 100%)",
-            padding: 0,
-            borderLeft: "none",
-            boxShadow: "-24px 0 70px rgba(10, 21, 53, 0.18)",
-            overflowX: "hidden",
+            width: "88%",
+            maxWidth: "380px",
+            background: "rgba(255,255,255,0.75)",
+            backdropFilter: "blur(30px) saturate(180%)",
+            WebkitBackdropFilter: "blur(30px) saturate(180%)",
+            boxShadow: "-16px 0 50px rgba(10,21,53,0.12)",
           },
         }}
       >
         <Box
-          ref={drawerContentRef}
           sx={{
             height: "100%",
             display: "flex",
             flexDirection: "column",
-            overflow: "auto",
           }}
         >
-          {/* ═══════════ DRAWER HEADER ═══════════ */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              p: 3,
-              pb: 2.5,
-              borderBottom: "1px solid rgba(10, 21, 53, 0.05)",
-              background: "rgba(255, 255, 255, 0.85)",
-              backdropFilter: "blur(12px)",
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
+              p: 2.5,
+              borderBottom: "1px solid rgba(10,21,53,0.05)",
             }}
           >
             <Box
-              className="mobile-drawer-logo"
               sx={{
-                height: "60px",
-                display: "flex",
-                alignItems: "center",
-                perspective: "600px",
+                height: "80px",
+                width: "80px",
+                position: "relative",
+                flexShrink: 0,
               }}
             >
               <Image
                 src="/logo.png"
                 alt="Logo"
-                width={200}
-                height={200}
+                width={80}
+                height={80}
                 quality={100}
+                sizes="80px"
                 style={{
-                  width: "auto",
-                  height: "100%",
                   objectFit: "contain",
-                  filter:
-                    "drop-shadow(0 2px 6px rgba(10, 21, 53, 0.08))",
+                  width: "100%",
+                  height: "100%",
+                  filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.05))",
                 }}
               />
             </Box>
@@ -854,40 +539,22 @@ export default function NavbarPremium() {
               onClick={handleDrawerToggle}
               sx={{
                 color: "#0a1535",
-                width: 46,
-                height: 46,
-                borderRadius: "13px",
-                background: "rgba(10, 21, 53, 0.04)",
-                border: "1px solid rgba(10, 21, 53, 0.06)",
-                transition: "all 0.4s ease",
+                width: 44,
+                height: 44,
+                borderRadius: "12px",
+                background: "rgba(10,21,53,0.04)",
+                transition: "all 0.3s ease",
                 "&:hover": {
-                  background: "rgba(10, 21, 53, 0.08)",
+                  background: "rgba(10,21,53,0.08)",
                   transform: "rotate(90deg)",
                 },
               }}
             >
-              <FaTimes size={22} />
+              <FaTimes size={20} />
             </IconButton>
           </Box>
 
-          {/* ═══════════ DRAWER NAV LINKS ═══════════ */}
-          <Box sx={{ flex: 1, p: 2.5, pt: 3 }}>
-            <Typography
-              className="mobile-drawer-item"
-              sx={{
-                fontSize: "0.68rem",
-                fontWeight: 700,
-                color: "#9aa3b4",
-                textTransform: "uppercase",
-                letterSpacing: "0.14em",
-                px: 2,
-                mb: 2,
-                fontFamily: "'Inter', sans-serif",
-              }}
-            >
-              Navigation
-            </Typography>
-
+          <Box sx={{ flex: 1, px: 2, pt: 2.5 }}>
             <List sx={{ p: 0 }}>
               {navLinks.map((link, index) => {
                 const isActive = pathname === link.href;
@@ -895,7 +562,7 @@ export default function NavbarPremium() {
                   <ListItem
                     key={link.name}
                     disablePadding
-                    sx={{ mb: 0.5 }}
+                    sx={{ mb: 0.4 }}
                     className="mobile-drawer-item"
                   >
                     <Link
@@ -909,83 +576,53 @@ export default function NavbarPremium() {
                     >
                       <ListItemButton
                         sx={{
-                          borderRadius: "14px",
-                          py: 1.6,
+                          borderRadius: "13px",
+                          py: 1.5,
                           px: 2,
                           background: isActive
-                            ? "linear-gradient(135deg, rgba(10, 21, 53, 0.07) 0%, rgba(200, 169, 81, 0.09) 100%)"
+                            ? "rgba(200,169,81,0.07)"
                             : "transparent",
                           borderLeft: isActive
-                            ? "3.5px solid #c8a951"
-                            : "3.5px solid transparent",
+                            ? "3px solid #c8a951"
+                            : "3px solid transparent",
                           transition: "all 0.3s ease",
                           "&:hover": {
-                            background: isActive
-                              ? "linear-gradient(135deg, rgba(10, 21, 53, 0.09) 0%, rgba(200, 169, 81, 0.12) 100%)"
-                              : "rgba(10, 21, 53, 0.04)",
-                            borderLeftColor: "#c8a951",
-                            transform: "translateX(6px)",
+                            background: "rgba(10,21,53,0.03)",
+                            transform: "translateX(4px)",
                           },
                         }}
                       >
-                        {/* Number indicator */}
                         <Typography
                           sx={{
                             fontSize: "0.68rem",
                             fontWeight: 700,
                             color: isActive ? "#c8a951" : "#c0c7d4",
-                            fontFamily: "'Inter', sans-serif",
                             mr: 2,
-                            minWidth: "22px",
-                            letterSpacing: "0.05em",
+                            minWidth: "20px",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {String(index + 1).padStart(2, "0")}
                         </Typography>
-
                         <ListItemText
                           primary={link.name}
                           slotProps={{
                             primary: {
                               sx: {
-                                fontSize: "0.98rem",
+                                fontSize: "0.94rem",
                                 fontWeight: isActive ? 700 : 500,
                                 color: isActive ? "#0a1535" : "#4a5568",
                                 fontFamily: "'Inter', sans-serif",
-                                letterSpacing: "0.01em",
                               },
                             },
                           }}
                         />
-
-                        {isActive ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                width: "9px",
-                                height: "9px",
-                                borderRadius: "50%",
-                                background:
-                                  "linear-gradient(135deg, #c8a951, #e0c76a)",
-                                boxShadow:
-                                  "0 0 12px rgba(200, 169, 81, 0.45)",
-                              }}
-                            />
-                          </Box>
-                        ) : (
-                          <HiArrowRight
-                            size={15}
-                            style={{
-                              color: "#c0c7d4",
-                              transition: "all 0.3s ease",
-                            }}
-                          />
-                        )}
+                        <HiArrowRight
+                          size={14}
+                          style={{
+                            color: isActive ? "#c8a951" : "#c0c7d4",
+                          }}
+                        />
                       </ListItemButton>
                     </Link>
                   </ListItem>
@@ -994,141 +631,60 @@ export default function NavbarPremium() {
             </List>
           </Box>
 
-          {/* ═══════════ DRAWER BOTTOM CTA ═══════════ */}
           <Box
-            className="mobile-cta-section"
             sx={{
-              p: 3,
-              borderTop: "1px solid rgba(10, 21, 53, 0.05)",
-              background: "rgba(255, 255, 255, 0.85)",
-              backdropFilter: "blur(12px)",
+              p: 2.5,
+              borderTop: "1px solid rgba(10,21,53,0.05)",
             }}
+            className="mobile-drawer-item"
           >
-            {/* Info card */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                mb: 2.5,
-                px: 1,
-              }}
-            >
-              <Box
-                sx={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "11px",
-                  background:
-                    "linear-gradient(135deg, rgba(200, 169, 81, 0.16), rgba(200, 169, 81, 0.06))",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  border: "1px solid rgba(200, 169, 81, 0.2)",
-                  flexShrink: 0,
-                }}
-              >
-                <Typography sx={{ fontSize: "0.9rem" }}>✦</Typography>
-              </Box>
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
-                    color: "#0a1535",
-                    fontFamily: "'Inter', sans-serif",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  Ready to get started?
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.72rem",
-                    color: "#7a8499",
-                    fontFamily: "'Inter', sans-serif",
-                  }}
-                >
-                  Schedule a free consultation today
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* CTA Button */}
             <Button
               fullWidth
               variant="contained"
-              endIcon={<HiArrowRight size={18} />}
+              endIcon={<HiArrowRight size={17} />}
               onClick={handleDrawerToggle}
               sx={{
                 background:
                   "linear-gradient(135deg, #0a1535 0%, #1a2a5e 100%)",
-                color: "#ffffff",
-                borderRadius: "14px",
-                py: 1.7,
-                fontSize: "0.96rem",
+                color: "#fff",
+                borderRadius: "13px",
+                py: 1.6,
+                fontSize: "0.94rem",
                 fontWeight: 600,
                 textTransform: "none",
                 fontFamily: "'Inter', sans-serif",
-                boxShadow: "0 8px 28px rgba(10, 21, 53, 0.22)",
-                border: "1px solid rgba(200, 169, 81, 0.15)",
-                position: "relative",
-                overflow: "hidden",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  top: 0,
-                  left: "-100%",
-                  width: "100%",
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(200, 169, 81, 0.2), transparent)",
-                  transition: "left 0.7s ease",
-                },
+                boxShadow: "0 6px 24px rgba(10,21,53,0.18)",
+                border: "1px solid rgba(200,169,81,0.1)",
                 "&:hover": {
                   background:
                     "linear-gradient(135deg, #0d1b45 0%, #1e3270 100%)",
-                  boxShadow: "0 14px 36px rgba(10, 21, 53, 0.32)",
-                  "&::before": {
-                    left: "100%",
-                  },
                 },
-                "&:active": {
-                  transform: "scale(0.98)",
-                },
-                transition: "all 0.3s ease",
               }}
             >
               Book Consultation
             </Button>
-
-            {/* Footer text */}
             <Typography
               sx={{
-                fontSize: "0.64rem",
+                fontSize: "0.65rem",
                 color: "#9aa3b4",
                 textAlign: "center",
-                mt: 2,
+                mt: 1.5,
                 fontFamily: "'Inter', sans-serif",
-                letterSpacing: "0.03em",
               }}
             >
-              No commitment required • Free initial consultation
+              Free consultation • No commitment
             </Typography>
           </Box>
         </Box>
       </Drawer>
 
-      {/* ═══════════════════════════════════════════════════════════ */}
-      {/* ═══════════ SPACER ═══════════ */}
-      {/* ═══════════════════════════════════════════════════════════ */}
       <Toolbar
         sx={{
           minHeight: {
-            xs: "78px",
-            sm: "85px",
-            md: "105px",
-            lg: "115px",
+            xs: "64px",
+            sm: "68px",
+            md: "72px",
+            lg: "76px",
           },
         }}
       />
