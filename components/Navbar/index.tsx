@@ -72,18 +72,17 @@ export default function NavbarPremium() {
 
       tl.fromTo(
         appBarRef.current,
-        { y: -100, opacity: 0 },
+        { y: -80, opacity: 0 },
         { y: 0, opacity: 1, duration: 1 }
       );
 
       tl.fromTo(
         logoRef.current,
-        { opacity: 0, scale: 0.3, rotateY: -180 },
+        { opacity: 0, scale: 0.5 },
         {
           opacity: 1,
           scale: 1,
-          rotateY: 0,
-          duration: 1.2,
+          duration: 1,
           ease: "back.out(1.7)",
         },
         "-=0.6"
@@ -224,16 +223,16 @@ export default function NavbarPremium() {
         elevation={0}
         sx={{
           background: scrolled
-            ? "rgba(255,255,255,0.55)"
-            : "rgba(255,255,255,0.65)",
+            ? "rgba(255,255,255,0.7)"
+            : "rgba(255,255,255,0.8)",
           backdropFilter: "blur(24px) saturate(180%)",
           WebkitBackdropFilter: "blur(24px) saturate(180%)",
           borderBottom: scrolled
             ? "1px solid rgba(10,21,53,0.08)"
             : "1px solid rgba(10,21,53,0.04)",
           boxShadow: scrolled
-            ? "0 4px 30px rgba(10,21,53,0.08), 0 1px 8px rgba(200,169,81,0.04)"
-            : "0 1px 12px rgba(10,21,53,0.03)",
+            ? "0 4px 30px rgba(10,21,53,0.06)"
+            : "none",
           transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
           zIndex: 1300,
         }}
@@ -244,19 +243,19 @@ export default function NavbarPremium() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              py: { xs: 0.3, md: 0.4, lg: 0.5 },
+              py: 0,
               minHeight: {
-                xs: "64px",
-                sm: "68px",
-                md: "72px",
-                lg: "76px",
+                xs: "90px !important",
+                sm: "95px !important",
+                md: "100px !important",
+                lg: "105px !important",
               },
               gap: 2,
             }}
             disableGutters
           >
-            {/* ══════ LOGO - BIGGER ══════ */}
-            <Link href="/" style={{ textDecoration: "none" }}>
+            {/* ══════ LOGO — SIGNIFICANTLY LARGER & SHARPER ══════ */}
+            <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               <Box
                 ref={logoRef}
                 sx={{
@@ -264,42 +263,40 @@ export default function NavbarPremium() {
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",
-                  perspective: "1000px",
                   position: "relative",
                   height: {
-                    xs: "100px",
-                    sm: "120px",
-                    md: "150px",
-                    lg: "170px",
-                    xl: "185px",
+                    xs: "110px",
+                    sm: "125px",
+                    md: "140px",
+                    lg: "155px",
+                    xl: "170px",
                   },
                   width: {
-                    xs: "100px",
-                    sm: "120px",
+                    xs: "120px",
+                    sm: "135px",
                     md: "150px",
-                    lg: "170px",
-                    xl: "185px",
-                  },
-                  transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-                  "&:hover": {
-                    transform: "scale(1.06) translateY(-2px)",
+                    lg: "165px",
+                    xl: "180px",
                   },
                   flexShrink: 0,
+                  transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+                  "&:hover": {
+                    transform: "scale(1.04)",
+                  },
                 }}
               >
                 <Image
                   src="/logo.png"
                   alt="Premium Consulting Logo"
-                  width={185}
-                  height={185}
+                  width={250}
+                  height={250}
                   priority
                   quality={100}
-                  sizes="(max-width: 640px) 100px, (max-width: 900px) 120px, (max-width: 1200px) 150px, (max-width: 1536px) 170px, 185px"
+                  sizes="(max-width: 600px) 120px, (max-width: 900px) 135px, (max-width: 1200px) 150px, (max-width: 1536px) 165px, 180px"
                   style={{
                     objectFit: "contain",
                     width: "100%",
                     height: "100%",
-                    filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.05))",
                   }}
                 />
               </Box>
@@ -314,11 +311,11 @@ export default function NavbarPremium() {
                   position: "absolute",
                   left: "50%",
                   transform: "translateX(-50%)",
-                  background: "rgba(255,255,255,0.45)",
-                  borderRadius: "16px",
+                  background: "rgba(245,247,251,0.55)",
+                  borderRadius: "14px",
                   padding: "5px 10px",
-                  border: "1px solid rgba(255,255,255,0.5)",
-                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255,255,255,0.6)",
+                  backdropFilter: "blur(14px)",
                   boxShadow: "0 2px 12px rgba(10,21,53,0.04)",
                   transition: "all 0.4s ease",
                 }}
@@ -339,12 +336,12 @@ export default function NavbarPremium() {
                         data-active={isActive}
                         sx={{
                           position: "relative",
-                          px: { md: 1.4, lg: 1.8, xl: 2.2 },
+                          px: { md: 1.4, lg: 1.7, xl: 2.1 },
                           py: 0.8,
                           cursor: "pointer",
-                          borderRadius: "11px",
+                          borderRadius: "10px",
                           background: isActive
-                            ? "rgba(255,255,255,0.85)"
+                            ? "rgba(255,255,255,0.95)"
                             : "transparent",
                           boxShadow: isActive
                             ? "0 2px 10px rgba(10,21,53,0.06)"
@@ -357,8 +354,8 @@ export default function NavbarPremium() {
                           sx={{
                             fontSize: {
                               md: "0.82rem",
-                              lg: "0.87rem",
-                              xl: "0.92rem",
+                              lg: "0.86rem",
+                              xl: "0.9rem",
                             },
                             fontWeight: isActive ? 700 : 500,
                             color: isActive ? "#0a1535" : "#5a6478",
@@ -366,6 +363,7 @@ export default function NavbarPremium() {
                             letterSpacing: "0.01em",
                             whiteSpace: "nowrap",
                             userSelect: "none",
+                            lineHeight: 1.4,
                           }}
                         >
                           {link.name}
@@ -376,8 +374,8 @@ export default function NavbarPremium() {
                           sx={{
                             position: "absolute",
                             bottom: "3px",
-                            left: "20%",
-                            right: "20%",
+                            left: "22%",
+                            right: "22%",
                             height: "2.5px",
                             background:
                               "linear-gradient(90deg, #c8a951, #d4b365, #c8a951)",
@@ -402,18 +400,18 @@ export default function NavbarPremium() {
               <Button
                 ref={ctaButtonRef}
                 variant="contained"
-                endIcon={<HiArrowRight size={17} />}
+                endIcon={<HiArrowRight size={16} />}
                 sx={{
                   background:
                     "linear-gradient(135deg, #0a1535 0%, #162550 50%, #1a2a5e 100%)",
                   color: "#fff",
-                  borderRadius: "13px",
-                  px: { md: 2.8, lg: 3.2, xl: 3.8 },
-                  py: { md: 1, lg: 1.2 },
-                  fontSize: { md: "0.84rem", lg: "0.89rem" },
+                  borderRadius: "12px",
+                  px: { md: 2.5, lg: 3, xl: 3.5 },
+                  py: { md: 1.1, lg: 1.25 },
+                  fontSize: { md: "0.82rem", lg: "0.86rem" },
                   fontWeight: 600,
                   textTransform: "none",
-                  boxShadow: "0 4px 20px rgba(10,21,53,0.12)",
+                  boxShadow: "0 4px 18px rgba(10,21,53,0.12)",
                   fontFamily: "'Inter', sans-serif",
                   letterSpacing: "0.02em",
                   border: "1px solid rgba(200,169,81,0.12)",
@@ -455,12 +453,13 @@ export default function NavbarPremium() {
                   },
                 }}
               >
-                <FaBars size={20} />
+                <FaBars size={19} />
               </IconButton>
             )}
           </Toolbar>
         </Container>
 
+        {/* Bottom gold accent line on scroll */}
         <Box
           sx={{
             position: "absolute",
@@ -487,12 +486,12 @@ export default function NavbarPremium() {
             backdropFilter: "blur(8px)",
           },
           "& .MuiDrawer-paper": {
-            width: "88%",
-            maxWidth: "380px",
-            background: "rgba(255,255,255,0.75)",
+            width: "85%",
+            maxWidth: "370px",
+            background: "rgba(255,255,255,0.85)",
             backdropFilter: "blur(30px) saturate(180%)",
             WebkitBackdropFilter: "blur(30px) saturate(180%)",
-            boxShadow: "-16px 0 50px rgba(10,21,53,0.12)",
+            boxShadow: "-12px 0 40px rgba(10,21,53,0.1)",
           },
         }}
       >
@@ -508,14 +507,16 @@ export default function NavbarPremium() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              p: 2.5,
+              px: 2.5,
+              py: 1.8,
               borderBottom: "1px solid rgba(10,21,53,0.05)",
             }}
           >
+            {/* Drawer logo - Made slightly bigger too */}
             <Box
               sx={{
-                height: "80px",
-                width: "80px",
+                height: "90px",
+                width: "95px",
                 position: "relative",
                 flexShrink: 0,
               }}
@@ -523,15 +524,14 @@ export default function NavbarPremium() {
               <Image
                 src="/logo.png"
                 alt="Logo"
-                width={80}
-                height={80}
+                width={110}
+                height={110}
                 quality={100}
-                sizes="80px"
+                sizes="95px"
                 style={{
                   objectFit: "contain",
                   width: "100%",
                   height: "100%",
-                  filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.05))",
                 }}
               />
             </Box>
@@ -539,9 +539,9 @@ export default function NavbarPremium() {
               onClick={handleDrawerToggle}
               sx={{
                 color: "#0a1535",
-                width: 44,
-                height: 44,
-                borderRadius: "12px",
+                width: 42,
+                height: 42,
+                borderRadius: "11px",
                 background: "rgba(10,21,53,0.04)",
                 transition: "all 0.3s ease",
                 "&:hover": {
@@ -550,7 +550,7 @@ export default function NavbarPremium() {
                 },
               }}
             >
-              <FaTimes size={20} />
+              <FaTimes size={19} />
             </IconButton>
           </Box>
 
@@ -576,8 +576,8 @@ export default function NavbarPremium() {
                     >
                       <ListItemButton
                         sx={{
-                          borderRadius: "13px",
-                          py: 1.5,
+                          borderRadius: "12px",
+                          py: 1.4,
                           px: 2,
                           background: isActive
                             ? "rgba(200,169,81,0.07)"
@@ -609,7 +609,7 @@ export default function NavbarPremium() {
                           slotProps={{
                             primary: {
                               sx: {
-                                fontSize: "0.94rem",
+                                fontSize: "0.92rem",
                                 fontWeight: isActive ? 700 : 500,
                                 color: isActive ? "#0a1535" : "#4a5568",
                                 fontFamily: "'Inter', sans-serif",
@@ -641,19 +641,19 @@ export default function NavbarPremium() {
             <Button
               fullWidth
               variant="contained"
-              endIcon={<HiArrowRight size={17} />}
+              endIcon={<HiArrowRight size={16} />}
               onClick={handleDrawerToggle}
               sx={{
                 background:
                   "linear-gradient(135deg, #0a1535 0%, #1a2a5e 100%)",
                 color: "#fff",
-                borderRadius: "13px",
-                py: 1.6,
-                fontSize: "0.94rem",
+                borderRadius: "12px",
+                py: 1.5,
+                fontSize: "0.92rem",
                 fontWeight: 600,
                 textTransform: "none",
                 fontFamily: "'Inter', sans-serif",
-                boxShadow: "0 6px 24px rgba(10,21,53,0.18)",
+                boxShadow: "0 6px 22px rgba(10,21,53,0.18)",
                 border: "1px solid rgba(200,169,81,0.1)",
                 "&:hover": {
                   background:
@@ -678,13 +678,14 @@ export default function NavbarPremium() {
         </Box>
       </Drawer>
 
+      {/* Spacer matching navbar height perfectly */}
       <Toolbar
         sx={{
           minHeight: {
-            xs: "64px",
-            sm: "68px",
-            md: "72px",
-            lg: "76px",
+            xs: "90px !important",
+            sm: "95px !important",
+            md: "100px !important",
+            lg: "105px !important",
           },
         }}
       />

@@ -161,7 +161,7 @@ export default function HeroPremium() {
     const ctx = gsap.context(() => {
       // Floating particles
       const particles = document.querySelectorAll("[data-particle]");
-      particles.forEach((p, i) => {
+      particles.forEach((p) => {
         gsap.fromTo(
           p,
           {
@@ -578,7 +578,7 @@ export default function HeroPremium() {
           }}
         >
           {/* Dots */}
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1}>
             {heroImages.map((_, i) => (
               <Box
                 key={i}
@@ -763,9 +763,7 @@ export default function HeroPremium() {
                         },
                         fontWeight: 700,
                         color:
-                          lineIdx === 1
-                            ? COLORS.gold
-                            : COLORS.primary,
+                          lineIdx === 1 ? COLORS.gold : COLORS.primary,
                         lineHeight: 1.08,
                         letterSpacing: "-0.03em",
                         fontFamily: "'Playfair Display', serif",
@@ -851,8 +849,7 @@ export default function HeroPremium() {
                       fontWeight: 600,
                       borderRadius: "12px",
                       textTransform: "none",
-                      boxShadow:
-                        "0 8px 25px rgba(10, 21, 53, 0.25)",
+                      boxShadow: "0 8px 25px rgba(10, 21, 53, 0.25)",
                       position: "relative",
                       overflow: "hidden",
                       fontFamily: "'Inter', sans-serif",
@@ -871,8 +868,7 @@ export default function HeroPremium() {
                       "&:hover": {
                         background: `linear-gradient(135deg, ${COLORS.primaryHover} 0%, #1a2f65 100%)`,
                         transform: "translateY(-3px)",
-                        boxShadow:
-                          "0 16px 40px rgba(10, 21, 53, 0.35)",
+                        boxShadow: "0 16px 40px rgba(10, 21, 53, 0.35)",
                         "&::before": { left: "100%" },
                       },
                       transition:
@@ -902,8 +898,7 @@ export default function HeroPremium() {
                         borderWidth: "1.5px",
                         background: "rgba(255, 255, 255, 0.95)",
                         transform: "translateY(-3px)",
-                        boxShadow:
-                          "0 12px 32px rgba(10, 21, 53, 0.12)",
+                        boxShadow: "0 12px 32px rgba(10, 21, 53, 0.12)",
                         color: COLORS.primary,
                       },
                       transition:
