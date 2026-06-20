@@ -5,8 +5,7 @@ import GlobalLoader from "@/components/GlobalLoader";
 
 const baseUrl = "https://www.1conveyancing.com";
 const siteName = "1 Conveyancing";
-const title =
-  "1 Conveyancing | Property Transactions Managed. Relationships Built.";
+const title = "1 Conveyancing | Property Transactions Managed. Relationships Built.";
 const description =
   "Professional property sales progression and conveyancing support services across the UK. Expert chain management, buyer & seller liaison, mortgage coordination, and documentation support for seamless transactions.";
 
@@ -96,7 +95,7 @@ const jsonLd = {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+44-000-000-0000",
+        telephone: "+44-XXX-XXX-XXXX",
         contactType: "Customer Service",
         availableLanguage: ["English"],
       },
@@ -112,16 +111,6 @@ const jsonLd = {
         "Chain Management",
         "Property Transaction Coordination",
       ],
-    },
-    {
-      "@type": "WebSite",
-      name: siteName,
-      url: baseUrl,
-      potentialAction: {
-        "@type": "SearchAction",
-        target: `${baseUrl}/search?q={search_term_string}`,
-        "query-input": "required name=search_term_string",
-      },
     },
     {
       "@type": "Organization",

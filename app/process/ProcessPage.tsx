@@ -16,11 +16,10 @@ import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Centralized theme colors
 const COLORS = {
-  primary: "#0a1535",
-  primaryHover: "#1a237e",
-  gold: "#c8a951",
+  primary: "#0D2340",
+  primaryHover: "#1a2f5e",
+  gold: "#C7A15A",
   goldLight: "#d4b365",
   textSecondary: "#3a4356",
   textMuted: "#5a6378",
@@ -76,7 +75,6 @@ export default function ProcessPage() {
   const ctaSubtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Hero animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -139,10 +137,8 @@ export default function ProcessPage() {
     return () => ctx.revert();
   }, []);
 
-  // Process steps animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Connecting line draw animation (desktop only)
       if (connectingLineRef.current) {
         gsap.fromTo(
           connectingLineRef.current,
@@ -160,7 +156,6 @@ export default function ProcessPage() {
         );
       }
 
-      // Step circles and content
       const validSteps = stepsRef.current.filter(
         (step): step is HTMLDivElement => step !== null
       );
@@ -188,7 +183,6 @@ export default function ProcessPage() {
     return () => ctx.revert();
   }, []);
 
-  // CTA section animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -230,7 +224,6 @@ export default function ProcessPage() {
     return () => ctx.revert();
   }, []);
 
-  // Step circle hover animations
   useEffect(() => {
     const circles = document.querySelectorAll("[data-step-circle]");
     const handlers: {
@@ -248,7 +241,7 @@ export default function ProcessPage() {
           scale: 1.12,
           background: COLORS.gold,
           borderColor: COLORS.gold,
-          boxShadow: "0 12px 30px rgba(200, 169, 81, 0.4)",
+          boxShadow: "0 12px 30px rgba(199, 161, 90, 0.4)",
           ease: "back.out(1.5)",
           overwrite: "auto",
         });
@@ -267,8 +260,8 @@ export default function ProcessPage() {
           duration: 0.4,
           scale: 1,
           background: COLORS.white,
-          borderColor: "rgba(200, 169, 81, 0.4)",
-          boxShadow: "0 4px 12px rgba(10, 21, 53, 0.06)",
+          borderColor: "rgba(199, 161, 90, 0.4)",
+          boxShadow: "0 4px 12px rgba(13, 35, 64, 0.06)",
           ease: "power2.out",
           overwrite: "auto",
         });
@@ -297,7 +290,6 @@ export default function ProcessPage() {
 
   return (
     <Box component="main">
-      {/* HERO SECTION */}
       <Box
         ref={heroSectionRef}
         sx={{
@@ -329,10 +321,10 @@ export default function ProcessPage() {
             inset: 0,
             background: `linear-gradient(
               90deg,
-              rgba(10, 21, 53, 0.95) 0%,
-              rgba(10, 21, 53, 0.85) 40%,
-              rgba(10, 21, 53, 0.55) 70%,
-              rgba(10, 21, 53, 0.3) 100%
+              rgba(13, 35, 64, 0.95) 0%,
+              rgba(13, 35, 64, 0.85) 40%,
+              rgba(13, 35, 64, 0.55) 70%,
+              rgba(13, 35, 64, 0.3) 100%
             )`,
             zIndex: 1,
           }}
@@ -346,7 +338,7 @@ export default function ProcessPage() {
             right: 0,
             height: "2px",
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.5) 50%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
             zIndex: 2,
           }}
         />
@@ -370,7 +362,7 @@ export default function ProcessPage() {
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               mb: 2,
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Manrope', sans-serif",
               textShadow: "0 2px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
@@ -393,7 +385,6 @@ export default function ProcessPage() {
             completion.
           </Typography>
 
-          {/* Breadcrumb */}
           <Stack
             ref={breadcrumbRef}
             direction="row"
@@ -430,7 +421,6 @@ export default function ProcessPage() {
         </Container>
       </Box>
 
-      {/* PROCESS STEPS SECTION */}
       <Box
         ref={processSectionRef}
         sx={{
@@ -440,14 +430,13 @@ export default function ProcessPage() {
           overflow: "hidden",
         }}
       >
-        {/* Background subtle gradients */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(circle at 10% 30%, rgba(200, 169, 81, 0.03) 0%, transparent 50%),
-              radial-gradient(circle at 90% 70%, rgba(10, 21, 53, 0.02) 0%, transparent 50%)
+              radial-gradient(circle at 10% 30%, rgba(199, 161, 90, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 90% 70%, rgba(13, 35, 64, 0.02) 0%, transparent 50%)
             `,
             pointerEvents: "none",
             zIndex: 0,
@@ -456,7 +445,6 @@ export default function ProcessPage() {
 
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1 }}>
           <Box sx={{ position: "relative" }}>
-            {/* Connecting Line (Desktop Only) */}
             <Box
               ref={connectingLineRef}
               sx={{
@@ -467,9 +455,9 @@ export default function ProcessPage() {
                 height: "1.5px",
                 background: `linear-gradient(90deg, 
                   transparent 0%, 
-                  rgba(200, 169, 81, 0.4) 10%, 
-                  rgba(200, 169, 81, 0.6) 50%, 
-                  rgba(200, 169, 81, 0.4) 90%, 
+                  rgba(199, 161, 90, 0.4) 10%, 
+                  rgba(199, 161, 90, 0.6) 50%, 
+                  rgba(199, 161, 90, 0.4) 90%, 
                   transparent 100%
                 )`,
                 display: { xs: "none", md: "block" },
@@ -495,7 +483,6 @@ export default function ProcessPage() {
                       px: { xs: 1, md: 1.5 },
                     }}
                   >
-                    {/* Number Circle */}
                     <Box
                       data-step-circle
                       sx={{
@@ -503,13 +490,13 @@ export default function ProcessPage() {
                         height: 64,
                         borderRadius: "50%",
                         background: COLORS.white,
-                        border: "2px solid rgba(200, 169, 81, 0.4)",
+                        border: "2px solid rgba(199, 161, 90, 0.4)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         cursor: "pointer",
                         mb: 3,
-                        boxShadow: "0 4px 12px rgba(10, 21, 53, 0.06)",
+                        boxShadow: "0 4px 12px rgba(13, 35, 64, 0.06)",
                         transition: "all 0.3s ease",
                       }}
                     >
@@ -519,7 +506,7 @@ export default function ProcessPage() {
                           fontSize: "1.15rem",
                           fontWeight: 700,
                           color: COLORS.gold,
-                          fontFamily: "'Playfair Display', serif",
+                          fontFamily: "'Manrope', sans-serif",
                           letterSpacing: "-0.01em",
                         }}
                       >
@@ -527,7 +514,6 @@ export default function ProcessPage() {
                       </Typography>
                     </Box>
 
-                    {/* Title */}
                     <Typography
                       sx={{
                         fontSize: { xs: "1rem", md: "1.05rem" },
@@ -535,7 +521,7 @@ export default function ProcessPage() {
                         color: COLORS.primary,
                         mb: 1.5,
                         lineHeight: 1.3,
-                        fontFamily: "'Playfair Display', serif",
+                        fontFamily: "'Manrope', sans-serif",
                         letterSpacing: "-0.01em",
                         minHeight: { md: "52px" },
                         display: "flex",
@@ -545,7 +531,6 @@ export default function ProcessPage() {
                       {step.title}
                     </Typography>
 
-                    {/* Description */}
                     <Typography
                       sx={{
                         fontSize: { xs: "0.875rem", md: "0.9rem" },
@@ -566,7 +551,6 @@ export default function ProcessPage() {
         </Container>
       </Box>
 
-      {/* CTA SECTION */}
       <Box
         sx={{
           background: COLORS.white,
@@ -584,24 +568,22 @@ export default function ProcessPage() {
               textAlign: "center",
               position: "relative",
               overflow: "hidden",
-              boxShadow: "0 12px 40px rgba(10, 21, 53, 0.15)",
+              boxShadow: "0 12px 40px rgba(13, 35, 64, 0.15)",
             }}
           >
-            {/* Background radial accents */}
             <Box
               sx={{
                 position: "absolute",
                 inset: 0,
                 background: `
-                  radial-gradient(circle at 20% 50%, rgba(200, 169, 81, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 50%, rgba(200, 169, 81, 0.05) 0%, transparent 50%)
+                  radial-gradient(circle at 20% 50%, rgba(199, 161, 90, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 50%, rgba(199, 161, 90, 0.05) 0%, transparent 50%)
                 `,
                 pointerEvents: "none",
                 zIndex: 0,
               }}
             />
 
-            {/* Top gold accent line */}
             <Box
               sx={{
                 position: "absolute",
@@ -610,7 +592,7 @@ export default function ProcessPage() {
                 right: 0,
                 height: "2px",
                 background:
-                  "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.5) 50%, transparent 100%)",
+                  "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
                 zIndex: 1,
               }}
             />
@@ -626,7 +608,7 @@ export default function ProcessPage() {
                   mb: 1.5,
                   lineHeight: 1.2,
                   letterSpacing: "-0.02em",
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Manrope', sans-serif",
                 }}
               >
                 Ready to get started?
@@ -670,14 +652,14 @@ export default function ProcessPage() {
                     width: "100%",
                     height: "100%",
                     background:
-                      "linear-gradient(90deg, transparent, rgba(200, 169, 81, 0.2), transparent)",
+                      "linear-gradient(90deg, transparent, rgba(199, 161, 90, 0.2), transparent)",
                     transition: "left 0.5s ease",
                   },
                   "&:hover": {
                     background: COLORS.gold,
                     color: COLORS.white,
                     transform: "translateY(-4px)",
-                    boxShadow: "0 16px 40px rgba(200, 169, 81, 0.4)",
+                    boxShadow: "0 16px 40px rgba(199, 161, 90, 0.4)",
                     "&::before": { left: "100%" },
                   },
                   transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",

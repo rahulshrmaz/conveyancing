@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import Navbar from "@/components/Navbar";
-import GlobalLoader from "@/components/GlobalLoader";
 import Hero from "@/components/Hero";
+import Services from "@/components/Services";
+import Process from "@/components/Process";
 import Team from "@/components/Team";
+import Testimonials from "@/components/Testimonials";
+import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-
-// Future Sections (uncomment when ready)
-// import Services from "@/components/sections/Services";
-// import Process from "@/components/sections/Process";
-// import Insights from "@/components/sections/Insights";
-// import Testimonials from "@/components/sections/Testimonials";
-// import WhatsAppButton from "@/components/common/WhatsAppButton";
 
 interface SectionProps {
   children: React.ReactNode;
@@ -46,28 +42,6 @@ function Section({
 }
 
 export default function HomeClient() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <Box
-        component="main"
-        sx={{
-          minHeight: "100vh",
-          background: "#ffffff",
-          overflowX: "hidden",
-          position: "relative",
-        }}
-      >
-        <GlobalLoader />
-      </Box>
-    );
-  }
-
   return (
     <Box
       component="main"
@@ -78,16 +52,9 @@ export default function HomeClient() {
         position: "relative",
       }}
     >
-      {/* NAVBAR */}
       <Navbar />
-
-      {/* HERO SECTION */}
       <Hero />
-
-      {/* SPACER */}
       <Box sx={{ pt: { xs: 8, md: 7, lg: 8 } }} />
-
-      {/* MAIN CONTENT */}
       <Box
         sx={{
           position: "relative",
@@ -96,35 +63,23 @@ export default function HomeClient() {
           flexDirection: "column",
         }}
       >
-        {/* TEAM SECTION */}
+        <Section background="#ffffff" spacing={8}>
+          <Services />
+        </Section>
+        <Section background="#F8F8F8" spacing={8}>
+          <Process />
+        </Section>
         <Section background="#ffffff" spacing={8}>
           <Team />
         </Section>
-
-        {/* All sections will go here */}
-
-        {/* <Section background="#ffffff">
-          <Services />
-        </Section>
-
-        <Section background="#ffffff">
-          <Process />
-        </Section>
-
-        <Section background="#ffffff">
-          <Insights />
-        </Section>
-
-        <Section background="#F4EFEB">
+        <Section background="#F8F8F8" spacing={8}>
           <Testimonials />
-        </Section> */}
+        </Section>
+        <Section background="#0D2340" spacing={8}>
+          <CTA />
+        </Section>
       </Box>
-
-      {/* FOOTER */}
       <Footer />
-
-      {/* WHATSAPP BUTTON (Future) */}
-      {/* <WhatsAppButton /> */}
     </Box>
   );
 }

@@ -24,11 +24,10 @@ import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Centralized theme colors
 const COLORS = {
-  primary: "#0a1535",
-  primaryHover: "#1a237e",
-  gold: "#c8a951",
+  primary: "#0D2340",
+  primaryHover: "#1a2f5e",
+  gold: "#C7A15A",
   goldLight: "#d4b365",
   textSecondary: "#3a4356",
   textMuted: "#5a6378",
@@ -85,17 +84,14 @@ export default function ServicesPage() {
   const servicesSectionRef = useRef<HTMLDivElement>(null);
   const serviceCardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Hero animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Background image entry
       gsap.fromTo(
         bgImageRef.current,
         { scale: 1.15, opacity: 0.7 },
         { scale: 1, opacity: 1, duration: 2, ease: "power2.out" }
       );
 
-      // Hero title animation
       gsap.fromTo(
         heroTitleRef.current,
         { opacity: 0, y: 50, rotationX: -10 },
@@ -109,7 +105,6 @@ export default function ServicesPage() {
         }
       );
 
-      // Hero subtitle
       gsap.fromTo(
         heroSubtitleRef.current,
         { opacity: 0, y: 30 },
@@ -122,7 +117,6 @@ export default function ServicesPage() {
         }
       );
 
-      // Breadcrumb animation
       gsap.fromTo(
         breadcrumbRef.current,
         { opacity: 0, y: 20 },
@@ -135,7 +129,6 @@ export default function ServicesPage() {
         }
       );
 
-      // Parallax effect
       if (bgImageRef.current) {
         gsap.to(bgImageRef.current, {
           y: -60,
@@ -153,7 +146,6 @@ export default function ServicesPage() {
     return () => ctx.revert();
   }, []);
 
-  // Service cards animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       const validServiceCards = serviceCardsRef.current.filter(
@@ -186,7 +178,6 @@ export default function ServicesPage() {
     return () => ctx.revert();
   }, []);
 
-  // Service card hover animations
   useEffect(() => {
     const cards = document.querySelectorAll("[data-service-card]");
     const handlers: {
@@ -205,8 +196,8 @@ export default function ServicesPage() {
         gsap.to(card, {
           duration: 0.5,
           y: -8,
-          boxShadow: "0 20px 50px rgba(10, 21, 53, 0.15)",
-          borderColor: "rgba(200, 169, 81, 0.4)",
+          boxShadow: "0 20px 50px rgba(13, 35, 64, 0.15)",
+          borderColor: "rgba(199, 161, 90, 0.4)",
           ease: "power3.out",
           overwrite: "auto",
         });
@@ -214,7 +205,7 @@ export default function ServicesPage() {
           duration: 0.5,
           scale: 1.1,
           borderColor: COLORS.gold,
-          background: "rgba(200, 169, 81, 0.1)",
+          background: "rgba(199, 161, 90, 0.1)",
           ease: "back.out(1.5)",
           overwrite: "auto",
         });
@@ -249,15 +240,15 @@ export default function ServicesPage() {
         gsap.to(card, {
           duration: 0.4,
           y: 0,
-          boxShadow: "0 4px 16px rgba(10, 21, 53, 0.05)",
-          borderColor: "rgba(10, 21, 53, 0.06)",
+          boxShadow: "0 4px 16px rgba(13, 35, 64, 0.05)",
+          borderColor: "rgba(13, 35, 64, 0.06)",
           ease: "power2.out",
           overwrite: "auto",
         });
         gsap.to(iconCircle, {
           duration: 0.4,
           scale: 1,
-          borderColor: "rgba(200, 169, 81, 0.3)",
+          borderColor: "rgba(199, 161, 90, 0.3)",
           background: "transparent",
           ease: "power2.out",
           overwrite: "auto",
@@ -274,7 +265,7 @@ export default function ServicesPage() {
           duration: 0.4,
           scale: 1,
           background: "transparent",
-          borderColor: "rgba(200, 169, 81, 0.3)",
+          borderColor: "rgba(199, 161, 90, 0.3)",
           ease: "power2.out",
           overwrite: "auto",
         });
@@ -304,7 +295,6 @@ export default function ServicesPage() {
 
   return (
     <Box component="main">
-      {/* HERO SECTION */}
       <Box
         ref={heroSectionRef}
         sx={{
@@ -316,7 +306,6 @@ export default function ServicesPage() {
           alignItems: "center",
         }}
       >
-        {/* Background Image */}
         <Box
           ref={bgImageRef}
           sx={{
@@ -331,23 +320,21 @@ export default function ServicesPage() {
           }}
         />
 
-        {/* Dark overlay */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `linear-gradient(
               90deg,
-              rgba(10, 21, 53, 0.95) 0%,
-              rgba(10, 21, 53, 0.85) 40%,
-              rgba(10, 21, 53, 0.55) 70%,
-              rgba(10, 21, 53, 0.3) 100%
+              rgba(13, 35, 64, 0.95) 0%,
+              rgba(13, 35, 64, 0.85) 40%,
+              rgba(13, 35, 64, 0.55) 70%,
+              rgba(13, 35, 64, 0.3) 100%
             )`,
             zIndex: 1,
           }}
         />
 
-        {/* Subtle gold accent line at bottom */}
         <Box
           sx={{
             position: "absolute",
@@ -356,7 +343,7 @@ export default function ServicesPage() {
             right: 0,
             height: "2px",
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.5) 50%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
             zIndex: 2,
           }}
         />
@@ -384,7 +371,7 @@ export default function ServicesPage() {
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               mb: 2,
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Manrope', sans-serif",
               textShadow: "0 2px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
@@ -406,7 +393,6 @@ export default function ServicesPage() {
             Comprehensive support at every stage of your property transaction.
           </Typography>
 
-          {/* Breadcrumb */}
           <Stack
             ref={breadcrumbRef}
             direction="row"
@@ -446,7 +432,6 @@ export default function ServicesPage() {
         </Container>
       </Box>
 
-      {/* SERVICES GRID SECTION */}
       <Box
         ref={servicesSectionRef}
         sx={{
@@ -456,14 +441,13 @@ export default function ServicesPage() {
           overflow: "hidden",
         }}
       >
-        {/* Subtle background pattern */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(circle at 10% 20%, rgba(200, 169, 81, 0.04) 0%, transparent 50%),
-              radial-gradient(circle at 90% 80%, rgba(10, 21, 53, 0.03) 0%, transparent 50%)
+              radial-gradient(circle at 10% 20%, rgba(199, 161, 90, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 90% 80%, rgba(13, 35, 64, 0.03) 0%, transparent 50%)
             `,
             pointerEvents: "none",
             zIndex: 0,
@@ -490,9 +474,9 @@ export default function ServicesPage() {
                       height: "100%",
                       p: { xs: 3, md: 3.5 },
                       background: COLORS.white,
-                      border: "1px solid rgba(10, 21, 53, 0.06)",
+                      border: "1px solid rgba(13, 35, 64, 0.06)",
                       borderRadius: "14px",
-                      boxShadow: "0 4px 16px rgba(10, 21, 53, 0.05)",
+                      boxShadow: "0 4px 16px rgba(13, 35, 64, 0.05)",
                       cursor: "pointer",
                       transition: "all 0.3s ease",
                       position: "relative",
@@ -500,13 +484,11 @@ export default function ServicesPage() {
                       minHeight: { xs: "260px", md: "280px" },
                     }}
                   >
-                    {/* Top section - Icon + Title */}
                     <Stack
                       direction="row"
                       spacing={2}
                       sx={{ mb: 2.5, alignItems: "center" }}
                     >
-                      {/* Icon Circle */}
                       <Box
                         data-icon-circle
                         sx={{
@@ -514,7 +496,7 @@ export default function ServicesPage() {
                           width: 52,
                           height: 52,
                           borderRadius: "50%",
-                          border: "1.5px solid rgba(200, 169, 81, 0.3)",
+                          border: "1.5px solid rgba(199, 161, 90, 0.3)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -524,14 +506,13 @@ export default function ServicesPage() {
                         <Icon size={26} color={COLORS.gold} />
                       </Box>
 
-                      {/* Title */}
                       <Typography
                         sx={{
                           fontSize: { xs: "1.05rem", md: "1.15rem" },
                           fontWeight: 700,
                           color: COLORS.primary,
                           lineHeight: 1.3,
-                          fontFamily: "'Playfair Display', serif",
+                          fontFamily: "'Manrope', sans-serif",
                           letterSpacing: "-0.01em",
                         }}
                       >
@@ -539,7 +520,6 @@ export default function ServicesPage() {
                       </Typography>
                     </Stack>
 
-                    {/* Description */}
                     <Typography
                       sx={{
                         fontSize: { xs: "0.875rem", md: "0.92rem" },
@@ -554,7 +534,6 @@ export default function ServicesPage() {
                       {service.description}
                     </Typography>
 
-                    {/* Arrow Button */}
                     <Box
                       sx={{
                         display: "flex",
@@ -568,7 +547,7 @@ export default function ServicesPage() {
                           width: 36,
                           height: 36,
                           borderRadius: "50%",
-                          border: "1.5px solid rgba(200, 169, 81, 0.3)",
+                          border: "1.5px solid rgba(199, 161, 90, 0.3)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",

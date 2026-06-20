@@ -1,345 +1,240 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
   Container,
   Typography,
   Grid,
-  Card,
-  Stack,
-  IconButton,
+  Paper,
 } from "@mui/material";
-import { motion } from "framer-motion";
-import { FaLinkedinIn, FaChevronRight } from "react-icons/fa";
-import Link from "next/link";
-import { useThemeMode } from "@/context/ThemeContext";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FaLinkedin } from "react-icons/fa";
 
-const teamMembers = [
+gsap.registerPlugin(ScrollTrigger);
+
+const COLORS = {
+  primary: "#0D2340",
+  gold: "#C7A15A",
+  textSecondary: "#3a4356",
+};
+
+const team = [
   {
     name: "Keone Fernandes",
     role: "Director | Head of Conveyancing",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    bio: "With over 17 years of experience in real estate operations and transaction management, Keone leads the strategic direction of 1 Conveyancing ensuring every client receives a seamless and professional experience.",
-    linkedin: "https://linkedin.com",
+    bio: "With more than 17 years of experience in real estate operations, transaction management, and client services, Keone leads the strategic direction of 1 Conveyancing. Having worked with leading property organisations across the UAE, he brings extensive expertise in conveyancing operations, client relationship management, and transaction progression. His focus is ensuring every client receives a seamless and professional experience from start to finish.",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    linkedin: "#",
   },
   {
     name: "Beckagael Mae Batuto",
     role: "Client Success & Operations Manager",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    bio: "Beckagael plays a key role in client communication, transaction coordination and operational support. She ensures every client receives exceptional service throughout their property journey.",
-    linkedin: "https://linkedin.com",
+    bio: "Beckagael plays a key role in client communication, transaction coordination, and operational support. Working closely with buyers, sellers, brokers, and legal professionals, she helps ensure every transaction progresses smoothly while maintaining exceptional client service standards.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    linkedin: "#",
   },
   {
     name: "Mark Kelvin Loreto",
     role: "Sales Progression Manager",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-    bio: "Mark oversees transaction progression and stakeholder coordination across active property sales, ensuring deadlines are met and transactions remain on track.",
-    linkedin: "https://linkedin.com",
+    bio: "Mark oversees transaction progression and stakeholder coordination across active property sales. His attention to detail and proactive approach help clients navigate the conveyancing process efficiently, ensuring deadlines are met and transactions remain on track.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    linkedin: "#",
   },
 ];
 
-export default function OurTeam() {
-  const { mode } = useThemeMode();
-  const isDark = mode === "dark";
+export default function Team() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const colors = {
-    pageBg: isDark ? "#0a0f1c" : "#f8f9fc",
-    cardBg: isDark ? "#0f172a" : "#ffffff",
-    text: isDark ? "#ffffff" : "#0D2340",
-    subText: isDark ? "#a0aec0" : "#5a6478",
-    border: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-    iconBg: isDark ? "rgba(199,161,90,0.15)" : "rgba(13,35,64,0.08)",
-    iconColor: isDark ? "#C7A15A" : "#0D2340",
-  };
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardsRef.current.filter(Boolean),
+        { opacity: 0, y: 60, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <Box component="section" sx={{ background: colors.pageBg }}>
-      {/* ========== HERO BANNER ========== */}
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          minHeight: { xs: "280px", md: "340px" },
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-      >
-        {/* DARK NAVY OVERLAY */}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            background: `linear-gradient(
-              90deg,
-              rgba(13, 35, 64, 0.98) 0%,
-              rgba(13, 35, 64, 0.92) 30%,
-              rgba(13, 35, 64, 0.7) 50%,
-              rgba(13, 35, 64, 0.3) 75%,
-              rgba(13, 35, 64, 0.1) 100%
-            )`,
-            zIndex: 1,
-          }}
-        />
-
-        {/* GOLD TOP LINE */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "1px",
-            background:
-              "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
-            zIndex: 2,
-          }}
-        />
-
-        <Container maxWidth="xl" sx={{ position: "relative", zIndex: 3 }}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+    <Box ref={sectionRef} sx={{ py: { xs: 6, md: 10 } }}>
+      <Container maxWidth="xl">
+        <Box sx={{ textAlign: "center", mb: { xs: 5, md: 7 } }}>
+          <Typography
+            sx={{
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              color: COLORS.gold,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              mb: 2,
+              fontFamily: "'Inter', sans-serif",
+            }}
           >
-            <Typography
-              component="h1"
-              sx={{
-                fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
-                fontWeight: 700,
-                color: "#ffffff",
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                mb: 2,
-                fontFamily: "'Playfair Display', serif",
-              }}
-            >
-              Our Team
-            </Typography>
+            The People Behind
+          </Typography>
+          <Typography
+            component="h2"
+            sx={{
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              fontWeight: 700,
+              color: COLORS.primary,
+              lineHeight: 1.15,
+              letterSpacing: "-0.03em",
+              fontFamily: "'Manrope', sans-serif",
+              mb: 2,
+            }}
+          >
+            Meet the Team
+          </Typography>
+          <Box
+            sx={{
+              width: 60,
+              height: 3,
+              background: `linear-gradient(90deg, ${COLORS.gold}, #d4b365)`,
+              borderRadius: 4,
+              mx: "auto",
+            }}
+          />
+        </Box>
 
-            <Typography
-              sx={{
-                fontSize: { xs: "0.95rem", md: "1.1rem" },
-                color: "rgba(255, 255, 255, 0.85)",
-                lineHeight: 1.6,
-                mb: 3,
-                maxWidth: "500px",
-              }}
-            >
-              Experienced professionals dedicated <br />
-              to progressing your property transaction.
-            </Typography>
-
-            {/* ✅ FIXED: alignItems moved to sx */}
-            <Stack
-              direction="row"
-              spacing={1.5}
-              sx={{ mt: 3, alignItems: "center" }}
-            >
-              <Link href="/" style={{ textDecoration: "none" }}>
-                <Typography
-                  sx={{
-                    fontSize: "0.875rem",
-                    color: "rgba(255, 255, 255, 0.7)",
-                    cursor: "pointer",
-                    transition: "color 0.3s ease",
-                    "&:hover": { color: "#C7A15A" },
-                  }}
-                >
-                  Home
-                </Typography>
-              </Link>
-              <FaChevronRight size={10} color="rgba(255,255,255,0.5)" />
-              <Typography
+        <Grid container spacing={{ xs: 3, md: 4 }}>
+          {team.map((member, index) => (
+            <Grid size={{ xs: 12, md: 4 }} key={index}>
+              <Paper
+                ref={(el: HTMLDivElement | null) => {
+                  cardsRef.current[index] = el;
+                }}
+                elevation={0}
                 sx={{
-                  fontSize: "0.875rem",
-                  color: "#C7A15A",
-                  fontWeight: 600,
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  background: "#ffffff",
+                  border: "1px solid rgba(13,35,64,0.06)",
+                  transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  height: "100%",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    boxShadow: "0 24px 48px rgba(13,35,64,0.1)",
+                    borderColor: "rgba(199,161,90,0.2)",
+                    "& .team-image": {
+                      transform: "scale(1.05)",
+                    },
+                  },
                 }}
               >
-                Team
-              </Typography>
-            </Stack>
-          </motion.div>
-        </Container>
-      </Box>
-
-      {/* ========== TEAM CARDS ========== */}
-      <Container maxWidth="xl" sx={{ py: { xs: 6, md: 8 } }}>
-        <Grid container spacing={{ xs: 3, md: 4 }}>
-          {teamMembers.map((member, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-              >
-                <Card
+                <Box
                   sx={{
-                    background: colors.cardBg,
-                    borderRadius: "12px",
-                    border: `1px solid ${colors.border}`,
+                    height: 280,
                     overflow: "hidden",
-                    boxShadow: isDark
-                      ? "0 4px 24px rgba(0,0,0,0.3)"
-                      : "0 4px 24px rgba(0,0,0,0.06)",
-                    transition: "all 0.4s ease",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      boxShadow: isDark
-                        ? "0 20px 40px rgba(0,0,0,0.5)"
-                        : "0 20px 40px rgba(13,35,64,0.12)",
-                      "& .member-image": {
-                        transform: "scale(1.05)",
-                      },
-                    },
+                    position: "relative",
                   }}
                 >
-                  {/* IMAGE */}
+                  <Box
+                    component="img"
+                    src={member.image}
+                    alt={member.name}
+                    className="team-image"
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      transition: "transform 0.6s ease",
+                    }}
+                  />
                   <Box
                     sx={{
-                      position: "relative",
-                      width: "100%",
-                      height: { xs: "320px", md: "360px" },
-                      overflow: "hidden",
-                      background: "#f0f0f0",
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: "50%",
+                      background:
+                        "linear-gradient(180deg, transparent, rgba(13,35,64,0.6))",
+                    }}
+                  />
+                </Box>
+
+                <Box sx={{ p: { xs: 3, md: 3.5 } }}>
+                  <Typography
+                    sx={{
+                      fontSize: "1.2rem",
+                      fontWeight: 700,
+                      color: COLORS.primary,
+                      mb: 0.5,
+                      fontFamily: "'Manrope', sans-serif",
                     }}
                   >
-                    <Box
-                      className="member-image"
-                      sx={{
-                        position: "absolute",
-                        inset: 0,
-                        backgroundImage: `url(${member.image})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center top",
-                        backgroundRepeat: "no-repeat",
-                        transition: "transform 0.6s ease",
-                      }}
-                    />
+                    {member.name}
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      color: COLORS.gold,
+                      mb: 2,
+                      fontFamily: "'Inter', sans-serif",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {member.role}
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      fontSize: "0.88rem",
+                      color: COLORS.textSecondary,
+                      lineHeight: 1.7,
+                      mb: 2.5,
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                  >
+                    {member.bio}
+                  </Typography>
+
+                  <Box
+                    component="a"
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                      color: COLORS.primary,
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      fontFamily: "'Inter', sans-serif",
+                      transition: "color 0.3s ease",
+                      "&:hover": { color: COLORS.gold },
+                    }}
+                  >
+                    <FaLinkedin size={16} />
+                    LinkedIn
                   </Box>
-
-                  {/* CONTENT */}
-                  <Box sx={{ p: { xs: 2.5, md: 3 } }}>
-                    <Typography
-                      sx={{
-                        fontSize: "1.15rem",
-                        fontWeight: 700,
-                        color: colors.text,
-                        mb: 0.5,
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {member.name}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        fontSize: "0.85rem",
-                        color: "#C7A15A",
-                        fontWeight: 600,
-                        mb: 2,
-                        letterSpacing: "0.02em",
-                      }}
-                    >
-                      {member.role}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        fontSize: "0.875rem",
-                        color: colors.subText,
-                        lineHeight: 1.7,
-                        mb: 3,
-                      }}
-                    >
-                      {member.bio}
-                    </Typography>
-
-                    <IconButton
-                      component="a"
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        width: 38,
-                        height: 38,
-                        background: colors.iconBg,
-                        borderRadius: "8px",
-                        color: colors.iconColor,
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          background: "#0077B5",
-                          color: "#ffffff",
-                          transform: "translateY(-2px)",
-                          boxShadow: "0 6px 16px rgba(0, 119, 181, 0.3)",
-                        },
-                      }}
-                    >
-                      <FaLinkedinIn size={16} />
-                    </IconButton>
-                  </Box>
-                </Card>
-              </motion.div>
+                </Box>
+              </Paper>
             </Grid>
           ))}
         </Grid>
       </Container>
-
-      {/* ========== BOTTOM CTA BAR ========== */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <Box
-          sx={{
-            background: "#0D2340",
-            py: { xs: 3, md: 4 },
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "1px",
-              background:
-                "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
-            }}
-          />
-
-          <Container maxWidth="xl">
-            <Typography
-              sx={{
-                fontSize: { xs: "1rem", md: "1.15rem" },
-                color: "#ffffff",
-                textAlign: "center",
-                fontWeight: 400,
-                letterSpacing: "0.01em",
-                fontStyle: "italic",
-              }}
-            >
-              Working together to deliver a better experience for every client.
-            </Typography>
-          </Container>
-        </Box>
-      </motion.div>
     </Box>
   );
 }

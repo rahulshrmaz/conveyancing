@@ -23,11 +23,10 @@ import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Centralized theme colors
 const COLORS = {
-  primary: "#0a1535",
-  primaryHover: "#1a237e",
-  gold: "#c8a951",
+  primary: "#0D2340",
+  primaryHover: "#1a2f5e",
+  gold: "#C7A15A",
   goldLight: "#d4b365",
   textSecondary: "#3a4356",
   textMuted: "#5a6378",
@@ -72,17 +71,14 @@ export default function AboutPage() {
   const ctaButtonRef = useRef<HTMLButtonElement>(null);
   const featureCardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Hero animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Background image entry
       gsap.fromTo(
         bgImageRef.current,
         { scale: 1.15, opacity: 0.7 },
         { scale: 1, opacity: 1, duration: 2, ease: "power2.out" }
       );
 
-      // Hero title animation
       gsap.fromTo(
         heroTitleRef.current,
         { opacity: 0, y: 50, rotationX: -10 },
@@ -96,7 +92,6 @@ export default function AboutPage() {
         }
       );
 
-      // Breadcrumb animation
       gsap.fromTo(
         breadcrumbRef.current,
         { opacity: 0, y: 20 },
@@ -109,7 +104,6 @@ export default function AboutPage() {
         }
       );
 
-      // Parallax effect
       if (bgImageRef.current) {
         gsap.to(bgImageRef.current, {
           y: -60,
@@ -127,10 +121,8 @@ export default function AboutPage() {
     return () => ctx.revert();
   }, []);
 
-  // Content section animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Subtitle
       gsap.fromTo(
         subtitleRef.current,
         { opacity: 0, x: -30 },
@@ -147,7 +139,6 @@ export default function AboutPage() {
         }
       );
 
-      // Title
       gsap.fromTo(
         titleRef.current,
         { opacity: 0, y: 40 },
@@ -164,7 +155,6 @@ export default function AboutPage() {
         }
       );
 
-      // Paragraphs - filter out null values
       const validParagraphs = paragraphsRef.current.filter(
         (p): p is HTMLParagraphElement => p !== null
       );
@@ -187,7 +177,6 @@ export default function AboutPage() {
         );
       }
 
-      // CTA Button
       gsap.fromTo(
         ctaButtonRef.current,
         { opacity: 0, scale: 0.9, y: 20 },
@@ -205,7 +194,6 @@ export default function AboutPage() {
         }
       );
 
-      // Feature cards - filter out null values
       const validFeatureCards = featureCardsRef.current.filter(
         (card): card is HTMLDivElement => card !== null
       );
@@ -233,7 +221,6 @@ export default function AboutPage() {
     return () => ctx.revert();
   }, []);
 
-  // Feature card hover animations
   useEffect(() => {
     const cards = document.querySelectorAll("[data-feature-card]");
     const handlers: {
@@ -250,8 +237,8 @@ export default function AboutPage() {
         gsap.to(card, {
           duration: 0.4,
           y: -6,
-          boxShadow: "0 16px 40px rgba(10, 21, 53, 0.12)",
-          borderColor: "rgba(200, 169, 81, 0.3)",
+          boxShadow: "0 16px 40px rgba(13, 35, 64, 0.12)",
+          borderColor: "rgba(199, 161, 90, 0.3)",
           ease: "power2.out",
           overwrite: "auto",
         });
@@ -259,7 +246,7 @@ export default function AboutPage() {
           duration: 0.5,
           scale: 1.1,
           borderColor: COLORS.gold,
-          background: "rgba(200, 169, 81, 0.08)",
+          background: "rgba(199, 161, 90, 0.08)",
           ease: "back.out(1.5)",
           overwrite: "auto",
         });
@@ -277,15 +264,15 @@ export default function AboutPage() {
         gsap.to(card, {
           duration: 0.4,
           y: 0,
-          boxShadow: "0 4px 16px rgba(10, 21, 53, 0.04)",
-          borderColor: "rgba(10, 21, 53, 0.06)",
+          boxShadow: "0 4px 16px rgba(13, 35, 64, 0.04)",
+          borderColor: "rgba(13, 35, 64, 0.06)",
           ease: "power2.out",
           overwrite: "auto",
         });
         gsap.to(iconCircle, {
           duration: 0.4,
           scale: 1,
-          borderColor: "rgba(200, 169, 81, 0.3)",
+          borderColor: "rgba(199, 161, 90, 0.3)",
           background: "transparent",
           ease: "power2.out",
           overwrite: "auto",
@@ -315,7 +302,6 @@ export default function AboutPage() {
 
   return (
     <Box component="main">
-      {/* HERO SECTION */}
       <Box
         ref={heroSectionRef}
         sx={{
@@ -327,7 +313,6 @@ export default function AboutPage() {
           alignItems: "center",
         }}
       >
-        {/* Background Image */}
         <Box
           ref={bgImageRef}
           sx={{
@@ -342,23 +327,21 @@ export default function AboutPage() {
           }}
         />
 
-        {/* Dark overlay */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `linear-gradient(
               90deg,
-              rgba(10, 21, 53, 0.92) 0%,
-              rgba(10, 21, 53, 0.85) 40%,
-              rgba(10, 21, 53, 0.6) 70%,
-              rgba(10, 21, 53, 0.4) 100%
+              rgba(13, 35, 64, 0.92) 0%,
+              rgba(13, 35, 64, 0.85) 40%,
+              rgba(13, 35, 64, 0.6) 70%,
+              rgba(13, 35, 64, 0.4) 100%
             )`,
             zIndex: 1,
           }}
         />
 
-        {/* Subtle gold accent line at bottom */}
         <Box
           sx={{
             position: "absolute",
@@ -367,7 +350,7 @@ export default function AboutPage() {
             right: 0,
             height: "2px",
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.5) 50%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
             zIndex: 2,
           }}
         />
@@ -395,14 +378,13 @@ export default function AboutPage() {
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               mb: 2,
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Manrope', sans-serif",
               textShadow: "0 2px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
             About 1 Conveyancing
           </Typography>
 
-          {/* Breadcrumb */}
           <Stack
             ref={breadcrumbRef}
             direction="row"
@@ -442,7 +424,6 @@ export default function AboutPage() {
         </Container>
       </Box>
 
-      {/* CONTENT SECTION */}
       <Box
         ref={contentSectionRef}
         sx={{
@@ -452,14 +433,13 @@ export default function AboutPage() {
           overflow: "hidden",
         }}
       >
-        {/* Subtle background pattern */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(circle at 10% 20%, rgba(200, 169, 81, 0.03) 0%, transparent 50%),
-              radial-gradient(circle at 90% 80%, rgba(10, 21, 53, 0.02) 0%, transparent 50%)
+              radial-gradient(circle at 10% 20%, rgba(199, 161, 90, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 90% 80%, rgba(13, 35, 64, 0.02) 0%, transparent 50%)
             `,
             pointerEvents: "none",
             zIndex: 0,
@@ -471,9 +451,7 @@ export default function AboutPage() {
           sx={{ position: "relative", zIndex: 1 }}
         >
           <Grid container spacing={{ xs: 5, md: 8 }}>
-            {/* LEFT SIDE - Content */}
             <Grid size={{ xs: 12, md: 6 }}>
-              {/* Subtitle */}
               <Typography
                 ref={subtitleRef}
                 sx={{
@@ -489,7 +467,6 @@ export default function AboutPage() {
                 Our Approach
               </Typography>
 
-              {/* Title */}
               <Typography
                 ref={titleRef}
                 component="h2"
@@ -505,13 +482,12 @@ export default function AboutPage() {
                   lineHeight: 1.2,
                   letterSpacing: "-0.02em",
                   mb: 4,
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "'Manrope', sans-serif",
                 }}
               >
                 A Smarter Way to Progress Property Transactions
               </Typography>
 
-              {/* Paragraphs */}
               <Typography
                 ref={(el: HTMLParagraphElement | null) => {
                   paragraphsRef.current[0] = el;
@@ -549,7 +525,6 @@ export default function AboutPage() {
                 transaction moving forward.
               </Typography>
 
-              {/* CTA Button */}
               <Button
                 ref={ctaButtonRef}
                 variant="contained"
@@ -563,7 +538,7 @@ export default function AboutPage() {
                   fontWeight: 600,
                   borderRadius: "8px",
                   textTransform: "none",
-                  boxShadow: "0 8px 25px rgba(10, 21, 53, 0.2)",
+                  boxShadow: "0 8px 25px rgba(13, 35, 64, 0.2)",
                   position: "relative",
                   overflow: "hidden",
                   fontFamily: "'Inter', sans-serif",
@@ -581,7 +556,7 @@ export default function AboutPage() {
                   "&:hover": {
                     background: COLORS.primaryHover,
                     transform: "translateY(-4px)",
-                    boxShadow: "0 16px 40px rgba(10, 21, 53, 0.35)",
+                    boxShadow: "0 16px 40px rgba(13, 35, 64, 0.35)",
                     "&::before": { left: "100%" },
                   },
                   transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -591,7 +566,6 @@ export default function AboutPage() {
               </Button>
             </Grid>
 
-            {/* RIGHT SIDE - Feature Cards */}
             <Grid size={{ xs: 12, md: 6 }}>
               <Stack spacing={2}>
                 {features.map((feature, index) => {
@@ -609,14 +583,13 @@ export default function AboutPage() {
                         gap: 2.5,
                         p: { xs: 2.5, md: 3 },
                         background: COLORS.white,
-                        border: "1px solid rgba(10, 21, 53, 0.06)",
+                        border: "1px solid rgba(13, 35, 64, 0.06)",
                         borderRadius: "12px",
-                        boxShadow: "0 4px 16px rgba(10, 21, 53, 0.04)",
+                        boxShadow: "0 4px 16px rgba(13, 35, 64, 0.04)",
                         cursor: "pointer",
                         transition: "all 0.3s ease",
                       }}
                     >
-                      {/* Icon Circle */}
                       <Box
                         data-icon-circle
                         sx={{
@@ -624,7 +597,7 @@ export default function AboutPage() {
                           width: 52,
                           height: 52,
                           borderRadius: "50%",
-                          border: "1.5px solid rgba(200, 169, 81, 0.3)",
+                          border: "1.5px solid rgba(199, 161, 90, 0.3)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -634,7 +607,6 @@ export default function AboutPage() {
                         <Icon size={26} color={COLORS.gold} />
                       </Box>
 
-                      {/* Text Content */}
                       <Box sx={{ flex: 1, pt: 0.5 }}>
                         <Typography
                           sx={{
@@ -643,7 +615,7 @@ export default function AboutPage() {
                             color: COLORS.primary,
                             mb: 0.5,
                             lineHeight: 1.3,
-                            fontFamily: "'Playfair Display', serif",
+                            fontFamily: "'Manrope', sans-serif",
                             letterSpacing: "-0.01em",
                           }}
                         >

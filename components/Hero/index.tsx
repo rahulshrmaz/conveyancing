@@ -22,20 +22,18 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const COLORS = {
-  primary: "#0a1535",
-  primaryHover: "#1a237e",
-  gold: "#c8a951",
+  primary: "#0D2340",
+  primaryHover: "#1a2f5e",
+  gold: "#C7A15A",
   goldLight: "#d4b365",
   textSecondary: "#3a4356",
   white: "#ffffff",
 };
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90",
-  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90",
-  "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90",
-  "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90",
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
 ];
 
 const stats = [
@@ -44,12 +42,6 @@ const stats = [
   { icon: PiUsersThreeLight, value: "98%", label: "Client Satisfaction" },
   { icon: PiClockCountdownLight, value: "24/7", label: "Transaction Updates" },
 ];
-
-interface EventHandler {
-  circle: Element;
-  onEnter: () => void;
-  onLeave: () => void;
-}
 
 export default function HeroPremium() {
   const heroContentRef = useRef<HTMLDivElement | null>(null);
@@ -66,13 +58,11 @@ export default function HeroPremium() {
   const [currentImage, setCurrentImage] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Image slideshow with crossfade
   useEffect(() => {
     const cycleImages = () => {
       setCurrentImage((prev) => {
         const next = (prev + 1) % heroImages.length;
 
-        // Fade out current
         if (bgImageRefs.current[prev]) {
           gsap.to(bgImageRefs.current[prev], {
             opacity: 0,
@@ -82,7 +72,6 @@ export default function HeroPremium() {
           });
         }
 
-        // Fade in next
         if (bgImageRefs.current[next]) {
           gsap.fromTo(
             bgImageRefs.current[next],
@@ -96,7 +85,6 @@ export default function HeroPremium() {
           );
         }
 
-        // Animate progress bar
         if (progressBarRef.current) {
           gsap.fromTo(
             progressBarRef.current,
@@ -109,7 +97,6 @@ export default function HeroPremium() {
           );
         }
 
-        // Animate dots
         dotsRef.current.forEach((dot, i) => {
           if (dot) {
             gsap.to(dot, {
@@ -118,7 +105,7 @@ export default function HeroPremium() {
                 i === next ? COLORS.gold : "rgba(255,255,255,0.4)",
               boxShadow:
                 i === next
-                  ? "0 0 12px rgba(200,169,81,0.5)"
+                  ? "0 0 12px rgba(199,161,90,0.5)"
                   : "0 0 0px transparent",
               duration: 0.4,
               ease: "back.out(1.5)",
@@ -130,7 +117,6 @@ export default function HeroPremium() {
       });
     };
 
-    // Initial setup
     if (bgImageRefs.current[0]) {
       gsap.set(bgImageRefs.current[0], { opacity: 1, scale: 1 });
     }
@@ -140,7 +126,6 @@ export default function HeroPremium() {
       }
     });
 
-    // Initial progress bar
     if (progressBarRef.current) {
       gsap.fromTo(
         progressBarRef.current,
@@ -156,10 +141,8 @@ export default function HeroPremium() {
     };
   }, []);
 
-  // Main entry animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Floating particles
       const particles = document.querySelectorAll("[data-particle]");
       particles.forEach((p) => {
         gsap.fromTo(
@@ -195,7 +178,6 @@ export default function HeroPremium() {
 
       const tl = gsap.timeline();
 
-      // Heading — word by word
       const headingEl = headingRef.current;
       if (headingEl) {
         const words = headingEl.querySelectorAll("[data-word]");
@@ -245,7 +227,6 @@ export default function HeroPremium() {
         "-=0.5"
       );
 
-      // Stats
       gsap.fromTo(
         statItemsRef.current.filter(Boolean),
         { opacity: 0, y: 50, scale: 0.8 },
@@ -264,7 +245,6 @@ export default function HeroPremium() {
         }
       );
 
-      // Counter animation for stats
       statItemsRef.current.filter(Boolean).forEach((item) => {
         const valueEl = item?.querySelector("[data-stat-value]");
         if (!valueEl) return;
@@ -300,10 +280,9 @@ export default function HeroPremium() {
     return () => ctx.revert();
   }, []);
 
-  // Stat icon hover
   useEffect(() => {
     const iconCircles = document.querySelectorAll("[data-stat-icon]");
-    const handlers: EventHandler[] = [];
+    const handlers: { circle: Element; onEnter: () => void; onLeave: () => void }[] = [];
 
     iconCircles.forEach((circle) => {
       gsap.set(circle, { transformOrigin: "center center" });
@@ -314,7 +293,7 @@ export default function HeroPremium() {
           duration: 0.5,
           scale: 1.15,
           borderColor: COLORS.gold,
-          boxShadow: "0 8px 24px rgba(200, 169, 81, 0.3)",
+          boxShadow: "0 8px 24px rgba(199,161,90,0.3)",
           ease: "back.out(1.5)",
           overwrite: "auto",
         });
@@ -333,7 +312,7 @@ export default function HeroPremium() {
           duration: 0.4,
           scale: 1,
           borderColor: "rgba(255, 255, 255, 0.2)",
-          boxShadow: "0 0px 0px rgba(200, 169, 81, 0)",
+          boxShadow: "0 0px 0px rgba(199,161,90,0)",
           ease: "power2.out",
           overwrite: "auto",
         });
@@ -360,7 +339,6 @@ export default function HeroPremium() {
     };
   }, []);
 
-  // Manual dot click
   const goToImage = (index: number) => {
     if (index === currentImage) return;
 
@@ -392,7 +370,7 @@ export default function HeroPremium() {
             i === index ? COLORS.gold : "rgba(255,255,255,0.4)",
           boxShadow:
             i === index
-              ? "0 0 12px rgba(200,169,81,0.5)"
+              ? "0 0 12px rgba(199,161,90,0.5)"
               : "0 0 0px transparent",
           duration: 0.4,
         });
@@ -442,7 +420,7 @@ export default function HeroPremium() {
                 i === next ? COLORS.gold : "rgba(255,255,255,0.4)",
               boxShadow:
                 i === next
-                  ? "0 0 12px rgba(200,169,81,0.5)"
+                  ? "0 0 12px rgba(199,161,90,0.5)"
                   : "0 0 0px transparent",
               duration: 0.4,
             });
@@ -453,7 +431,6 @@ export default function HeroPremium() {
     }, 5000);
   };
 
-  // Split heading into words for animation
   const headingLines = [
     "Property Transactions",
     "Managed.",
@@ -470,7 +447,6 @@ export default function HeroPremium() {
         overflow: "hidden",
       }}
     >
-      {/* HERO MAIN SECTION */}
       <Box
         sx={{
           position: "relative",
@@ -481,7 +457,6 @@ export default function HeroPremium() {
           overflow: "hidden",
         }}
       >
-        {/* Multiple background images stacked */}
         {heroImages.map((img, i) => (
           <Box
             key={i}
@@ -502,7 +477,6 @@ export default function HeroPremium() {
           />
         ))}
 
-        {/* Floating particles */}
         {Array.from({ length: 12 }).map((_, i) => (
           <Box
             key={`particle-${i}`}
@@ -512,7 +486,7 @@ export default function HeroPremium() {
               width: gsap.utils.random(3, 8) + "px",
               height: gsap.utils.random(3, 8) + "px",
               borderRadius: "50%",
-              background: `rgba(200, 169, 81, ${gsap.utils.random(
+              background: `rgba(199, 161, 90, ${gsap.utils.random(
                 0.15,
                 0.35
               )})`,
@@ -525,7 +499,6 @@ export default function HeroPremium() {
           />
         ))}
 
-        {/* White gradient overlay */}
         <Box
           sx={{
             position: "absolute",
@@ -546,24 +519,22 @@ export default function HeroPremium() {
           }}
         />
 
-        {/* Top & bottom subtle gradients */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `linear-gradient(
               180deg,
-              rgba(10, 21, 53, 0.03) 0%,
+              rgba(13, 35, 64, 0.03) 0%,
               transparent 15%,
               transparent 85%,
-              rgba(10, 21, 53, 0.05) 100%
+              rgba(13, 35, 64, 0.05) 100%
             )`,
             zIndex: 2,
             pointerEvents: "none",
           }}
         />
 
-        {/* Image indicators - dots & progress */}
         <Box
           sx={{
             position: "absolute",
@@ -577,7 +548,6 @@ export default function HeroPremium() {
             gap: 1.5,
           }}
         >
-          {/* Dots */}
           <Stack direction="row" spacing={1}>
             {heroImages.map((_, i) => (
               <Box
@@ -597,7 +567,7 @@ export default function HeroPremium() {
                   transform: i === 0 ? "scale(1.4)" : "scale(1)",
                   boxShadow:
                     i === 0
-                      ? "0 0 12px rgba(200,169,81,0.5)"
+                      ? "0 0 12px rgba(199,161,90,0.5)"
                       : "0 0 0px transparent",
                   "&:hover": {
                     background: COLORS.goldLight,
@@ -608,7 +578,6 @@ export default function HeroPremium() {
             ))}
           </Stack>
 
-          {/* Progress bar */}
           <Box
             sx={{
               width: 120,
@@ -631,14 +600,13 @@ export default function HeroPremium() {
           </Box>
         </Box>
 
-        {/* Image counter badge */}
         <Box
           sx={{
             position: "absolute",
             top: { xs: 16, md: 32 },
             right: { xs: 16, md: 48 },
             zIndex: 5,
-            background: "rgba(10, 21, 53, 0.6)",
+            background: "rgba(13, 35, 64, 0.6)",
             backdropFilter: "blur(12px)",
             border: "1px solid rgba(255,255,255,0.1)",
             borderRadius: "12px",
@@ -688,7 +656,6 @@ export default function HeroPremium() {
         >
           <Grid container>
             <Grid size={{ xs: 12, md: 7, lg: 6 }}>
-              {/* Welcome Badge */}
               <Box ref={badgeRef} sx={{ display: "inline-block", mb: 3 }}>
                 <Box
                   sx={{
@@ -696,15 +663,14 @@ export default function HeroPremium() {
                     alignItems: "center",
                     gap: 1.2,
                     background:
-                      "linear-gradient(135deg, rgba(200, 169, 81, 0.12), rgba(26, 35, 126, 0.08))",
+                      "linear-gradient(135deg, rgba(199, 161, 90, 0.12), rgba(26, 35, 126, 0.08))",
                     px: 2.5,
                     py: 1,
                     borderRadius: "50px",
-                    border: "1px solid rgba(200, 169, 81, 0.25)",
+                    border: "1px solid rgba(199, 161, 90, 0.25)",
                     backdropFilter: "blur(8px)",
                   }}
                 >
-                  {/* Pulsing dot */}
                   <Box
                     sx={{
                       width: 8,
@@ -736,7 +702,7 @@ export default function HeroPremium() {
                     sx={{
                       fontSize: "0.75rem",
                       fontWeight: 600,
-                      color: COLORS.primaryHover,
+                      color: COLORS.primary,
                       letterSpacing: "0.2em",
                       textTransform: "uppercase",
                       fontFamily: "'Inter', sans-serif",
@@ -747,7 +713,6 @@ export default function HeroPremium() {
                 </Box>
               </Box>
 
-              {/* Main Heading — word by word */}
               <Box ref={headingRef} sx={{ mb: 3, perspective: "1000px" }}>
                 {headingLines.map((line, lineIdx) => (
                   <Box key={lineIdx} sx={{ overflow: "hidden" }}>
@@ -766,7 +731,7 @@ export default function HeroPremium() {
                           lineIdx === 1 ? COLORS.gold : COLORS.primary,
                         lineHeight: 1.08,
                         letterSpacing: "-0.03em",
-                        fontFamily: "'Playfair Display', serif",
+                        fontFamily: "'Manrope', sans-serif",
                       }}
                     >
                       {line.split(" ").map((word, wIdx) => (
@@ -788,7 +753,6 @@ export default function HeroPremium() {
                 ))}
               </Box>
 
-              {/* Decorative line */}
               <Box
                 sx={{
                   width: 60,
@@ -799,7 +763,6 @@ export default function HeroPremium() {
                 }}
               />
 
-              {/* Description */}
               <Typography
                 ref={descriptionRef}
                 sx={{
@@ -812,12 +775,9 @@ export default function HeroPremium() {
                   fontFamily: "'Inter', sans-serif",
                 }}
               >
-                Specialist sales progression and conveyancing support
-                ensuring your property transaction moves smoothly from offer
-                to completion.
+                A specialist sales progression and conveyancing support company helping buyers, sellers, investors, developers, and estate agencies complete property transactions with confidence.
               </Typography>
 
-              {/* CTA Buttons */}
               <Box ref={buttonsRef}>
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
@@ -849,11 +809,11 @@ export default function HeroPremium() {
                       fontWeight: 600,
                       borderRadius: "12px",
                       textTransform: "none",
-                      boxShadow: "0 8px 25px rgba(10, 21, 53, 0.25)",
+                      boxShadow: "0 8px 25px rgba(13, 35, 64, 0.25)",
                       position: "relative",
                       overflow: "hidden",
                       fontFamily: "'Inter', sans-serif",
-                      border: "1px solid rgba(200,169,81,0.1)",
+                      border: "1px solid rgba(199,161,90,0.1)",
                       "&::before": {
                         content: '""',
                         position: "absolute",
@@ -862,13 +822,13 @@ export default function HeroPremium() {
                         width: "100%",
                         height: "100%",
                         background:
-                          "linear-gradient(90deg, transparent, rgba(200,169,81,0.15), transparent)",
+                          "linear-gradient(90deg, transparent, rgba(199,161,90,0.15), transparent)",
                         transition: "left 0.6s ease",
                       },
                       "&:hover": {
                         background: `linear-gradient(135deg, ${COLORS.primaryHover} 0%, #1a2f65 100%)`,
                         transform: "translateY(-3px)",
-                        boxShadow: "0 16px 40px rgba(10, 21, 53, 0.35)",
+                        boxShadow: "0 16px 40px rgba(13, 35, 64, 0.35)",
                         "&::before": { left: "100%" },
                       },
                       transition:
@@ -881,7 +841,7 @@ export default function HeroPremium() {
                   <Button
                     variant="outlined"
                     sx={{
-                      borderColor: "rgba(10,21,53,0.2)",
+                      borderColor: "rgba(13,35,64,0.2)",
                       color: COLORS.primary,
                       borderWidth: "1.5px",
                       px: 4,
@@ -898,7 +858,7 @@ export default function HeroPremium() {
                         borderWidth: "1.5px",
                         background: "rgba(255, 255, 255, 0.95)",
                         transform: "translateY(-3px)",
-                        boxShadow: "0 12px 32px rgba(10, 21, 53, 0.12)",
+                        boxShadow: "0 12px 32px rgba(13, 35, 64, 0.12)",
                         color: COLORS.primary,
                       },
                       transition:
@@ -914,7 +874,6 @@ export default function HeroPremium() {
         </Container>
       </Box>
 
-      {/* STATS SECTION */}
       <Box
         ref={statsContainerRef}
         sx={{
@@ -924,14 +883,13 @@ export default function HeroPremium() {
           overflow: "hidden",
         }}
       >
-        {/* Animated grid pattern */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             backgroundImage: `
-              linear-gradient(rgba(200,169,81,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(200,169,81,0.03) 1px, transparent 1px)
+              linear-gradient(rgba(199,161,90,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(199,161,90,0.03) 1px, transparent 1px)
             `,
             backgroundSize: "60px 60px",
             pointerEvents: "none",
@@ -939,22 +897,20 @@ export default function HeroPremium() {
           }}
         />
 
-        {/* Radial gradient backgrounds */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(circle at 15% 50%, rgba(200, 169, 81, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 85% 50%, rgba(200, 169, 81, 0.04) 0%, transparent 50%),
-              radial-gradient(circle at 50% 0%, rgba(200, 169, 81, 0.03) 0%, transparent 40%)
+              radial-gradient(circle at 15% 50%, rgba(199, 161, 90, 0.06) 0%, transparent 50%),
+              radial-gradient(circle at 85% 50%, rgba(199, 161, 90, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 50% 0%, rgba(199, 161, 90, 0.03) 0%, transparent 40%)
             `,
             pointerEvents: "none",
             zIndex: 0,
           }}
         />
 
-        {/* Top gold accent line */}
         <Box
           sx={{
             position: "absolute",
@@ -1003,13 +959,12 @@ export default function HeroPremium() {
                             bottom: "20%",
                             width: "1px",
                             background:
-                              "linear-gradient(180deg, transparent, rgba(200,169,81,0.15), transparent)",
+                              "linear-gradient(180deg, transparent, rgba(199,161,90,0.15), transparent)",
                             display: { xs: "none", md: "block" },
                           }
                         : {},
                     }}
                   >
-                    {/* Icon Circle */}
                     <Box
                       data-stat-icon
                       sx={{
@@ -1030,7 +985,6 @@ export default function HeroPremium() {
                       <Icon size={28} color={COLORS.gold} />
                     </Box>
 
-                    {/* Value */}
                     <Typography
                       data-stat-value
                       sx={{
@@ -1039,13 +993,12 @@ export default function HeroPremium() {
                         color: COLORS.white,
                         lineHeight: 1,
                         letterSpacing: "-0.02em",
-                        fontFamily: "'Playfair Display', serif",
+                        fontFamily: "'Manrope', sans-serif",
                       }}
                     >
                       {stat.value}
                     </Typography>
 
-                    {/* Label */}
                     <Typography
                       sx={{
                         fontSize: { xs: "0.75rem", md: "0.85rem" },
@@ -1065,7 +1018,6 @@ export default function HeroPremium() {
           </Grid>
         </Container>
 
-        {/* Bottom accent line */}
         <Box
           sx={{
             position: "absolute",

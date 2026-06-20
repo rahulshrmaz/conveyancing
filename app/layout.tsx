@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import Script from "next/script";
 import { Inter, Manrope } from "next/font/google";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Providers from "./providers";
+import theme from './theme';
 import "./globals.css";
 
 const inter = Inter({
@@ -102,6 +107,9 @@ const jsonLd = {
   ],
 };
 
+// ✅ YAHAN SE DELETE KARO - duplicate theme declaration
+// const theme = { ... }   <-- ISKO HATAO
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
@@ -109,25 +117,30 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${inter.variable} ${manrope.variable}`}
       suppressHydrationWarning
     >
-      <body
-        className={`${inter.className} min-h-screen bg-white text-[#1B1B1B] antialiased`}
-      >
-        <Script
-          id="schema-ld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+      <body className={`${inter.className} min-h-screen bg-white text-[#1B1B1B] antialiased`}>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>  {/* ✅ Ab ye imported theme use karega */}
+            <CssBaseline />
+            <Providers>
+              <Script
+                id="schema-ld"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+              />
 
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#0D2340] focus:shadow-lg"
-        >
-          Skip to main content
-        </a>
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#0D2340] focus:shadow-lg"
+              >
+                Skip to main content
+              </a>
 
-        <div id="main-content" className="min-h-screen">
-          {children}
-        </div>
+              <div id="main-content" className="min-h-screen">
+                {children}
+              </div>
+            </Providers>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

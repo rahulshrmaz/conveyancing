@@ -30,24 +30,23 @@ const quickLinks = [
   { name: "Services", href: "/services" },
   { name: "Our Process", href: "/process" },
   { name: "Team", href: "/team" },
-  { name: "Insights", href: "/insights" },
   { name: "Contact Us", href: "/contact" },
 ];
 
 const services = [
-  { name: "Sales Progression", href: "/services/sales-progression" },
-  { name: "Chain Management", href: "/services/chain-management" },
-  { name: "Buyer & Seller Liaison", href: "/services/buyer-seller-liaison" },
-  { name: "Mortgage Coordination", href: "/services/mortgage-coordination" },
-  { name: "Documentation Support", href: "/services/documentation" },
-  { name: "Completion Management", href: "/services/completion" },
+  { name: "Sales Progression", href: "/services" },
+  { name: "Chain Management", href: "/services" },
+  { name: "Buyer & Seller Liaison", href: "/services" },
+  { name: "Mortgage Coordination", href: "/services" },
+  { name: "Documentation Support", href: "/services" },
+  { name: "Completion Management", href: "/services" },
 ];
 
 const contactInfo = [
   {
     icon: FaPhone,
-    text: "+44 20 1234 5678",
-    href: "tel:+442012345678",
+    text: "+971569778391",
+    href: "tel:+971569778391",
   },
   {
     icon: FaEnvelope,
@@ -56,7 +55,7 @@ const contactInfo = [
   },
   {
     icon: FaMapMarkerAlt,
-    text: "London, United Kingdom",
+    text: "London | Dubai",
     href: null,
   },
 ];
@@ -74,10 +73,8 @@ export default function Footer() {
   const dividerRef = useRef<HTMLHRElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // ═══════════ SCROLL-TRIGGERED ANIMATIONS ═══════════
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Logo entrance
       if (logoRef.current) {
         gsap.fromTo(
           logoRef.current,
@@ -98,7 +95,6 @@ export default function Footer() {
         );
       }
 
-      // Logo glow pulse (infinite)
       if (logoGlowRef.current) {
         gsap.fromTo(
           logoGlowRef.current,
@@ -127,7 +123,6 @@ export default function Footer() {
         );
       }
 
-      // Columns stagger
       const validColumns = columnsRef.current.filter(
         (col): col is HTMLDivElement => col !== null
       );
@@ -148,7 +143,6 @@ export default function Footer() {
         }
       );
 
-      // Divider expand
       if (dividerRef.current) {
         gsap.fromTo(
           dividerRef.current,
@@ -166,7 +160,6 @@ export default function Footer() {
         );
       }
 
-      // Bottom bar
       if (bottomRef.current) {
         gsap.fromTo(
           bottomRef.current,
@@ -202,7 +195,6 @@ export default function Footer() {
         pb: 0,
       }}
     >
-      {/* ═══════════ TOP GOLD LINE ═══════════ */}
       <Box
         sx={{
           position: "absolute",
@@ -215,7 +207,6 @@ export default function Footer() {
         }}
       />
 
-      {/* ═══════════ DECORATIVE CIRCLES ═══════════ */}
       <Box
         sx={{
           position: "absolute",
@@ -245,9 +236,6 @@ export default function Footer() {
 
       <Container maxWidth="xl">
         <Grid container spacing={{ xs: 5, md: 6 }} sx={{ pb: 6 }}>
-          {/* ═══════════════════════════════════════════ */}
-          {/* ═══════════ LOGO + DESCRIPTION COLUMN ═══════════ */}
-          {/* ═══════════════════════════════════════════ */}
           <Grid
             size={{ xs: 12, sm: 6, md: 3 }}
             ref={(el: HTMLDivElement | null) => {
@@ -277,7 +265,6 @@ export default function Footer() {
                   },
                 }}
               >
-                {/* Glow behind logo */}
                 <Box
                   ref={logoGlowRef}
                   sx={{
@@ -296,7 +283,6 @@ export default function Footer() {
                   }}
                 />
 
-                {/* Outer decorative ring */}
                 <Box
                   sx={{
                     position: "absolute",
@@ -331,7 +317,6 @@ export default function Footer() {
               </Box>
             </Link>
 
-            {/* Description text */}
             <Typography
               sx={{
                 fontSize: "0.85rem",
@@ -342,11 +327,9 @@ export default function Footer() {
                 mb: 3,
               }}
             >
-              Professional conveyancing services ensuring smooth and efficient
-              property transactions across the United Kingdom.
+              A specialist sales progression and conveyancing support company helping buyers, sellers, investors, developers, and estate agencies complete property transactions with confidence.
             </Typography>
 
-            {/* Trust badge */}
             <Box
               sx={{
                 display: "inline-flex",
@@ -382,9 +365,6 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          {/* ═══════════════════════════════════════════ */}
-          {/* ═══════════ QUICK LINKS COLUMN ═══════════ */}
-          {/* ═══════════════════════════════════════════ */}
           <Grid
             size={{ xs: 6, sm: 6, md: 2.5 }}
             ref={(el: HTMLDivElement | null) => {
@@ -468,9 +448,6 @@ export default function Footer() {
             </Stack>
           </Grid>
 
-          {/* ═══════════════════════════════════════════ */}
-          {/* ═══════════ SERVICES COLUMN ═══════════ */}
-          {/* ═══════════════════════════════════════════ */}
           <Grid
             size={{ xs: 6, sm: 6, md: 3.5 }}
             ref={(el: HTMLDivElement | null) => {
@@ -554,9 +531,6 @@ export default function Footer() {
             </Stack>
           </Grid>
 
-          {/* ═══════════════════════════════════════════ */}
-          {/* ═══════════ CONTACT COLUMN ═══════════ */}
-          {/* ═══════════════════════════════════════════ */}
           <Grid
             size={{ xs: 12, sm: 6, md: 3 }}
             ref={(el: HTMLDivElement | null) => {
@@ -658,7 +632,6 @@ export default function Footer() {
               })}
             </Stack>
 
-            {/* SOCIAL LINKS */}
             <Stack direction="row" spacing={1.5} sx={{ mt: 3.5 }}>
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
@@ -694,7 +667,6 @@ export default function Footer() {
           </Grid>
         </Grid>
 
-        {/* ═══════════ DIVIDER ═══════════ */}
         <Divider
           ref={dividerRef}
           sx={{
@@ -715,7 +687,6 @@ export default function Footer() {
           }}
         />
 
-        {/* ═══════════ BOTTOM BAR ═══════════ */}
         <Box
           ref={bottomRef}
           sx={{
@@ -734,7 +705,6 @@ export default function Footer() {
               gap: 1.5,
             }}
           >
-            {/* Small logo in bottom bar */}
             <Box
               sx={{
                 height: "24px",

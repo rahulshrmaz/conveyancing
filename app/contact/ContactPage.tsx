@@ -9,6 +9,7 @@ import {
   Grid,
   Stack,
   TextField,
+  Alert,
 } from "@mui/material";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -21,32 +22,32 @@ import {
   PiClockLight,
 } from "react-icons/pi";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Centralized theme colors
 const COLORS = {
-  primary: "#0a1535",
-  primaryHover: "#1a237e",
-  gold: "#c8a951",
+  primary: "#0D2340",
+  primaryHover: "#1a2f5e",
+  gold: "#C7A15A",
   goldLight: "#d4b365",
   textSecondary: "#3a4356",
   textMuted: "#5a6378",
   white: "#ffffff",
   bgLight: "#f8f9fb",
-  borderLight: "rgba(10, 21, 53, 0.08)",
+  borderLight: "rgba(13, 35, 64, 0.08)",
 };
 
 const contactInfo = [
   {
     icon: PiPhoneLight,
     title: "Phone",
-    value: "+44 20 1234 5678",
+    value: "+971569778391",
   },
   {
     icon: PiEnvelopeLight,
     title: "Email",
-    value: "hello@1conveyancing.com",
+    value: "customercare@aeconveyancing.one",
   },
   {
     icon: PiMapPinLight,
@@ -69,6 +70,9 @@ export default function ContactPage() {
     message: "",
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
@@ -81,7 +85,6 @@ export default function ContactPage() {
   const formBoxRef = useRef<HTMLFormElement>(null);
   const formFieldsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Hero animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -144,10 +147,8 @@ export default function ContactPage() {
     return () => ctx.revert();
   }, []);
 
-  // Content animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Contact info items
       const validContactItems = contactItemsRef.current.filter(
         (item): item is HTMLDivElement => item !== null
       );
@@ -170,7 +171,6 @@ export default function ContactPage() {
         );
       }
 
-      // CTA button
       gsap.fromTo(
         ctaButtonRef.current,
         { opacity: 0, scale: 0.9, y: 20 },
@@ -188,7 +188,6 @@ export default function ContactPage() {
         }
       );
 
-      // Form box
       gsap.fromTo(
         formBoxRef.current,
         { opacity: 0, x: 50, scale: 0.95 },
@@ -206,7 +205,6 @@ export default function ContactPage() {
         }
       );
 
-      // Form fields stagger
       const validFormFields = formFieldsRef.current.filter(
         (field): field is HTMLDivElement => field !== null
       );
@@ -234,7 +232,6 @@ export default function ContactPage() {
     return () => ctx.revert();
   }, []);
 
-  // Contact icon hover animations
   useEffect(() => {
     const icons = document.querySelectorAll("[data-contact-icon]");
     const handlers: {
@@ -251,7 +248,7 @@ export default function ContactPage() {
           duration: 0.5,
           scale: 1.1,
           borderColor: COLORS.gold,
-          background: "rgba(200, 169, 81, 0.08)",
+          background: "rgba(199, 161, 90, 0.08)",
           ease: "back.out(1.5)",
           overwrite: "auto",
         });
@@ -269,7 +266,7 @@ export default function ContactPage() {
         gsap.to(iconBox, {
           duration: 0.4,
           scale: 1,
-          borderColor: "rgba(200, 169, 81, 0.3)",
+          borderColor: "rgba(199, 161, 90, 0.3)",
           background: "transparent",
           ease: "power2.out",
           overwrite: "auto",
@@ -299,15 +296,136 @@ export default function ContactPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error for this field when user types
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    }
+    if (!formData.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    }
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+
+    if (!validateForm()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      
+      // Show success toast
+      toast.success("Message sent successfully! 🎉");
+      
+      // Show additional success toast with details
+      toast.custom((t) => (
+        <Box
+          sx={{
+            background: "#ffffff",
+            borderRadius: "12px",
+            p: 3,
+            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+            border: "1px solid rgba(199, 161, 90, 0.2)",
+            maxWidth: "400px",
+            minWidth: "300px",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1rem",
+              fontWeight: 600,
+              color: COLORS.primary,
+              fontFamily: "'Manrope', sans-serif",
+              mb: 1,
+            }}
+          >
+            ✅ Message Sent!
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "0.9rem",
+              color: COLORS.textSecondary,
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            We'll get back to you within 24 hours.
+          </Typography>
+          <Box
+            sx={{
+              mt: 2,
+              pt: 2,
+              borderTop: "1px solid rgba(13,35,64,0.06)",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                color: COLORS.textMuted,
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              <strong>Name:</strong> {formData.name}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                color: COLORS.textMuted,
+                fontFamily: "'Inter', sans-serif",
+              }}
+            >
+              <strong>Email:</strong> {formData.email}
+            </Typography>
+          </Box>
+        </Box>
+      ), {
+        duration: 5000,
+        position: 'top-right',
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+
+      // Open mail client as backup (optional)
+      // const mailtoLink = `mailto:customercare@aeconveyancing.one?subject=${encodeURIComponent(formData.subject)}&body=Name: ${encodeURIComponent(formData.name)}%0D%0AEmail: ${encodeURIComponent(formData.email)}%0D%0APhone: ${encodeURIComponent(formData.phone)}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(formData.message)}`;
+      // window.location.href = mailtoLink;
+    }, 1500);
   };
 
-  // Common TextField styles
   const textFieldSx = {
     "& .MuiOutlinedInput-root": {
       borderRadius: "8px",
@@ -316,17 +434,20 @@ export default function ContactPage() {
       fontSize: "0.95rem",
       transition: "all 0.3s ease",
       "& fieldset": {
-        borderColor: "rgba(10, 21, 53, 0.12)",
+        borderColor: "rgba(13, 35, 64, 0.12)",
         borderWidth: "1px",
         transition: "all 0.3s ease",
       },
       "&:hover fieldset": {
-        borderColor: "rgba(200, 169, 81, 0.5)",
+        borderColor: "rgba(199, 161, 90, 0.5)",
       },
       "&.Mui-focused fieldset": {
         borderColor: COLORS.gold,
         borderWidth: "1.5px",
-        boxShadow: "0 0 0 3px rgba(200, 169, 81, 0.1)",
+        boxShadow: "0 0 0 3px rgba(199, 161, 90, 0.1)",
+      },
+      "&.Mui-error fieldset": {
+        borderColor: "#ef4444",
       },
     },
     "& .MuiInputBase-input": {
@@ -334,9 +455,13 @@ export default function ContactPage() {
       px: 1.5,
       color: COLORS.primary,
     },
+    "& .MuiFormHelperText-root": {
+      fontSize: "0.75rem",
+      fontFamily: "'Inter', sans-serif",
+      ml: 0,
+    },
   };
 
-  // Label styles
   const labelSx = {
     fontSize: "0.85rem",
     fontWeight: 500,
@@ -348,7 +473,7 @@ export default function ContactPage() {
 
   return (
     <Box component="main">
-      {/* HERO SECTION */}
+      {/* Hero Section */}
       <Box
         ref={heroSectionRef}
         sx={{
@@ -360,7 +485,6 @@ export default function ContactPage() {
           alignItems: "center",
         }}
       >
-        {/* Background Image */}
         <Box
           ref={bgImageRef}
           sx={{
@@ -375,23 +499,21 @@ export default function ContactPage() {
           }}
         />
 
-        {/* Dark overlay */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `linear-gradient(
               90deg,
-              rgba(10, 21, 53, 0.95) 0%,
-              rgba(10, 21, 53, 0.85) 40%,
-              rgba(10, 21, 53, 0.55) 70%,
-              rgba(10, 21, 53, 0.3) 100%
+              rgba(13, 35, 64, 0.95) 0%,
+              rgba(13, 35, 64, 0.85) 40%,
+              rgba(13, 35, 64, 0.55) 70%,
+              rgba(13, 35, 64, 0.3) 100%
             )`,
             zIndex: 1,
           }}
         />
 
-        {/* Gold accent line */}
         <Box
           sx={{
             position: "absolute",
@@ -400,7 +522,7 @@ export default function ContactPage() {
             right: 0,
             height: "2px",
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(200, 169, 81, 0.5) 50%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(199, 161, 90, 0.5) 50%, transparent 100%)",
             zIndex: 2,
           }}
         />
@@ -424,7 +546,7 @@ export default function ContactPage() {
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               mb: 2,
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Manrope', sans-serif",
               textShadow: "0 2px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
@@ -446,7 +568,6 @@ export default function ContactPage() {
             Get in touch with our team today.
           </Typography>
 
-          {/* Breadcrumb */}
           <Stack
             ref={breadcrumbRef}
             direction="row"
@@ -483,7 +604,7 @@ export default function ContactPage() {
         </Container>
       </Box>
 
-      {/* CONTENT SECTION */}
+      {/* Content Section */}
       <Box
         ref={contentSectionRef}
         sx={{
@@ -493,14 +614,13 @@ export default function ContactPage() {
           overflow: "hidden",
         }}
       >
-        {/* Background subtle gradients */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(circle at 10% 20%, rgba(200, 169, 81, 0.03) 0%, transparent 50%),
-              radial-gradient(circle at 90% 80%, rgba(10, 21, 53, 0.02) 0%, transparent 50%)
+              radial-gradient(circle at 10% 20%, rgba(199, 161, 90, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 90% 80%, rgba(13, 35, 64, 0.02) 0%, transparent 50%)
             `,
             pointerEvents: "none",
             zIndex: 0,
@@ -509,7 +629,6 @@ export default function ContactPage() {
 
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1 }}>
           <Grid container spacing={{ xs: 5, md: 6 }}>
-            {/* LEFT SIDE - Contact Info */}
             <Grid size={{ xs: 12, md: 5 }}>
               <Stack spacing={3.5} sx={{ mb: 4 }}>
                 {contactInfo.map((info, index) => {
@@ -526,7 +645,6 @@ export default function ContactPage() {
                         gap: 2.5,
                       }}
                     >
-                      {/* Icon Circle */}
                       <Box
                         data-contact-icon
                         sx={{
@@ -534,7 +652,7 @@ export default function ContactPage() {
                           width: 48,
                           height: 48,
                           borderRadius: "50%",
-                          border: "1.5px solid rgba(200, 169, 81, 0.3)",
+                          border: "1.5px solid rgba(199, 161, 90, 0.3)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -545,7 +663,6 @@ export default function ContactPage() {
                         <Icon size={24} color={COLORS.gold} />
                       </Box>
 
-                      {/* Text */}
                       <Box sx={{ pt: 0.3 }}>
                         <Typography
                           sx={{
@@ -554,7 +671,7 @@ export default function ContactPage() {
                             color: COLORS.primary,
                             mb: 0.3,
                             lineHeight: 1.3,
-                            fontFamily: "'Playfair Display', serif",
+                            fontFamily: "'Manrope', sans-serif",
                             letterSpacing: "-0.01em",
                           }}
                         >
@@ -577,7 +694,6 @@ export default function ContactPage() {
                 })}
               </Stack>
 
-              {/* CTA Button */}
               <Button
                 ref={ctaButtonRef}
                 variant="contained"
@@ -591,7 +707,7 @@ export default function ContactPage() {
                   fontWeight: 600,
                   borderRadius: "8px",
                   textTransform: "none",
-                  boxShadow: "0 8px 25px rgba(10, 21, 53, 0.2)",
+                  boxShadow: "0 8px 25px rgba(13, 35, 64, 0.2)",
                   position: "relative",
                   overflow: "hidden",
                   fontFamily: "'Inter', sans-serif",
@@ -609,7 +725,7 @@ export default function ContactPage() {
                   "&:hover": {
                     background: COLORS.primaryHover,
                     transform: "translateY(-4px)",
-                    boxShadow: "0 16px 40px rgba(10, 21, 53, 0.35)",
+                    boxShadow: "0 16px 40px rgba(13, 35, 64, 0.35)",
                     "&::before": { left: "100%" },
                   },
                   transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -619,7 +735,6 @@ export default function ContactPage() {
               </Button>
             </Grid>
 
-            {/* RIGHT SIDE - Contact Form */}
             <Grid size={{ xs: 12, md: 7 }}>
               <Box
                 ref={formBoxRef}
@@ -627,10 +742,10 @@ export default function ContactPage() {
                 onSubmit={handleSubmit}
                 sx={{
                   background: COLORS.bgLight,
-                  border: "1px solid rgba(10, 21, 53, 0.06)",
+                  border: "1px solid rgba(13, 35, 64, 0.06)",
                   borderRadius: "16px",
                   p: { xs: 3, sm: 4, md: 5 },
-                  boxShadow: "0 4px 20px rgba(10, 21, 53, 0.04)",
+                  boxShadow: "0 4px 20px rgba(13, 35, 64, 0.04)",
                 }}
               >
                 <Typography
@@ -639,7 +754,7 @@ export default function ContactPage() {
                     fontWeight: 700,
                     color: COLORS.primary,
                     mb: 3.5,
-                    fontFamily: "'Playfair Display', serif",
+                    fontFamily: "'Manrope', sans-serif",
                     letterSpacing: "-0.01em",
                   }}
                 >
@@ -647,20 +762,21 @@ export default function ContactPage() {
                 </Typography>
 
                 <Grid container spacing={2.5}>
-                  {/* Name + Email Row */}
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <Box
                       ref={(el: HTMLDivElement | null) => {
                         formFieldsRef.current[0] = el;
                       }}
                     >
-                      <Typography sx={labelSx}>Your Name</Typography>
+                      <Typography sx={labelSx}>Your Name *</Typography>
                       <TextField
                         fullWidth
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         variant="outlined"
+                        error={!!errors.name}
+                        helperText={errors.name}
                         sx={textFieldSx}
                       />
                     </Box>
@@ -672,7 +788,7 @@ export default function ContactPage() {
                         formFieldsRef.current[1] = el;
                       }}
                     >
-                      <Typography sx={labelSx}>Email Address</Typography>
+                      <Typography sx={labelSx}>Email Address *</Typography>
                       <TextField
                         fullWidth
                         name="email"
@@ -680,57 +796,60 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         variant="outlined"
+                        error={!!errors.email}
+                        helperText={errors.email}
                         sx={textFieldSx}
                       />
                     </Box>
                   </Grid>
 
-                  {/* Phone */}
                   <Grid size={{ xs: 12 }}>
                     <Box
                       ref={(el: HTMLDivElement | null) => {
                         formFieldsRef.current[2] = el;
                       }}
                     >
-                      <Typography sx={labelSx}>Phone Number</Typography>
+                      <Typography sx={labelSx}>Phone Number *</Typography>
                       <TextField
                         fullWidth
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
                         variant="outlined"
+                        error={!!errors.phone}
+                        helperText={errors.phone}
                         sx={textFieldSx}
                       />
                     </Box>
                   </Grid>
 
-                  {/* Subject */}
                   <Grid size={{ xs: 12 }}>
                     <Box
                       ref={(el: HTMLDivElement | null) => {
                         formFieldsRef.current[3] = el;
                       }}
                     >
-                      <Typography sx={labelSx}>Subject</Typography>
+                      <Typography sx={labelSx}>Subject *</Typography>
                       <TextField
                         fullWidth
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
                         variant="outlined"
+                        error={!!errors.subject}
+                        helperText={errors.subject}
                         sx={textFieldSx}
                       />
                     </Box>
                   </Grid>
 
-                  {/* Message */}
                   <Grid size={{ xs: 12 }}>
                     <Box
                       ref={(el: HTMLDivElement | null) => {
                         formFieldsRef.current[4] = el;
                       }}
                     >
-                      <Typography sx={labelSx}>Your Message</Typography>
+                      <Typography sx={labelSx}>Your Message *</Typography>
                       <TextField
                         fullWidth
                         name="message"
@@ -739,12 +858,13 @@ export default function ContactPage() {
                         multiline
                         rows={5}
                         variant="outlined"
+                        error={!!errors.message}
+                        helperText={errors.message}
                         sx={textFieldSx}
                       />
                     </Box>
                   </Grid>
 
-                  {/* Submit Button */}
                   <Grid size={{ xs: 12 }}>
                     <Box
                       ref={(el: HTMLDivElement | null) => {
@@ -755,6 +875,7 @@ export default function ContactPage() {
                       <Button
                         type="submit"
                         variant="contained"
+                        disabled={isSubmitting}
                         sx={{
                           background: COLORS.primary,
                           color: COLORS.white,
@@ -764,7 +885,7 @@ export default function ContactPage() {
                           fontWeight: 600,
                           borderRadius: "8px",
                           textTransform: "none",
-                          boxShadow: "0 8px 25px rgba(10, 21, 53, 0.2)",
+                          boxShadow: "0 8px 25px rgba(13, 35, 64, 0.2)",
                           position: "relative",
                           overflow: "hidden",
                           fontFamily: "'Inter', sans-serif",
@@ -782,14 +903,17 @@ export default function ContactPage() {
                           "&:hover": {
                             background: COLORS.primaryHover,
                             transform: "translateY(-3px)",
-                            boxShadow: "0 14px 35px rgba(10, 21, 53, 0.3)",
+                            boxShadow: "0 14px 35px rgba(13, 35, 64, 0.3)",
                             "&::before": { left: "100%" },
+                          },
+                          "&:disabled": {
+                            opacity: 0.7,
                           },
                           transition:
                             "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
                         }}
                       >
-                        Send Message
+                        {isSubmitting ? "Sending..." : "Send Message"}
                       </Button>
                     </Box>
                   </Grid>
